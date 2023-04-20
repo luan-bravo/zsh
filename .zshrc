@@ -4,7 +4,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/home/lul/.config/zsh/oh-my-zsh/"
 
-# Set name of the theme to load --- if set to "random", it will
+# set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
@@ -101,8 +101,8 @@ fi
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-alias zshconfig="nvim ~/.config/zsh/.zshrc"
-alias ohmyzsh="nvim ~/.config/zsh/.oh-my-zsh"
+alias zshconfig="nvim $ZDOTDIR/.zshrc"
+alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
 # Better and easier than nvim
 alias hx="helix"
 # Clean your room
@@ -118,11 +118,12 @@ alias x="exa -l -h -n -s='type' --icons"
 alias xt="exa -l -h -n -T -s='type' --icons"
 alias xa="exa -l -a -h -n -s='type' --icons"
 alias xta="exa -l -a -h -n -T -s='type' --icons"
+alias py="python"
 
 # Fix del key (set as ^H)
 bindkey "^H" delete-char
 
-# ZSH Highlighting (MUST REMAIN LAST!)
+# MUST REMAIN LAST! : ZSH Highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 
 # pnpm
@@ -132,3 +133,4 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
