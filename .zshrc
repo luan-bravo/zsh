@@ -104,7 +104,7 @@ fi
 alias zshconfig="nvim $ZDOTDIR/.zshrc"
 alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
 # Better and easier than nvim
-alias hx="helix"
+# alias hx="helix"
 # Clean your room
 alias c="clear"
 # Let get this over with
