@@ -119,7 +119,9 @@ alias xt="exa -l -h -n -T -s='type' --icons"
 alias xa="exa -l -a -h -n -s='type' --icons"
 alias xta="exa -l -a -h -n -T -s='type' --icons"
 alias py="python"
-alias q="exit"
+alias pokta="pass otp okta"
+
+alias py="python"
 
 # Personal Sripts
 mknote () {
@@ -128,6 +130,9 @@ mknote () {
 }
 # Fix del key (set as ^H)
 bindkey "^H" delete-char
+# Fix backspace key (set as ^H) 
+bindkey "^M" accept-line
+
 
 # MUST REMAIN LAST! : ZSH Highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
