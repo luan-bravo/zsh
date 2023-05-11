@@ -125,8 +125,8 @@ alias py="python"
 
 # Personal Sripts
 mknote () {
-  echo "# TITLE: $1\n# DATE: $(date +"%y/%m/%d")\n# TIME: $(date +"%H:%M")\n# AUTHOR: luan-brav0\n# CONTENT: " >> ./"$(date +"%y%m%d%H%M")$1".md
-  nvim ./"$(date +"%F_%H-%M")--$1".md
+  echo "# TITLE: $1\n# DATE: $(date +"%y/%m/%d")\n# TIME: $(date +"%H:%M")\n# AUTHOR: luan-brav0\n# CONTENT: " >> ./"$(date +"%y%m%d%H%M")--$1".md
+  nvim ./"$(date +"%y%m%d%H%M")--$1".md
 }
 # Fix del key (set as ^H)
 bindkey "^H" delete-char
