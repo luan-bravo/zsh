@@ -120,12 +120,12 @@ alias xa="exa -l -a -h -n -s='type' --icons"
 alias xta="exa -l -a -h -n -T -s='type' --icons"
 alias py="python"
 alias pokta="pass otp okta"
-
+alias q="exit"
 alias py="python"
 
 # Personal Sripts
 mknote () {
-  echo "# TITLE: $1\n# DATE: $(date +"%y/%m/%d")\n# TIME: $(date +"%H:%M")\n# AUTHOR: luan-brav0\n# CONTENT: " >> ./"$(date +"%y%m%d%H%M")--$1".md
+  echo "# TITLE: $1\n\n# AUTHOR: luan-brav0\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
   nvim ./"$(date +"%y%m%d%H%M")--$1".md
 }
 # Fix del key (set as ^H)
