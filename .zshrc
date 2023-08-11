@@ -101,6 +101,8 @@ fi
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
+alias q="exit"
+alias py="python"
 alias zshconfig="nvim $ZDOTDIR/.zshrc"
 alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
 # Better and easier than nvim
@@ -109,7 +111,7 @@ alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
 alias c="clear"
 # Let get this over with
 alias gs="git status"
-alias gaa="git add ."
+alias gaa="git add -A"
 alias gcm="git commit -m"
 alias gpm="git push"
 # Fix overscan (when using old HDMI TV as monitor)
@@ -119,24 +121,38 @@ alias xt="exa -l -h -n -T -s='type' --icons"
 alias xa="exa -l -a -h -n -s='type' --icons"
 alias xta="exa -l -a -h -n -T -s='type' --icons"
 alias py="python"
-alias pokta="pass otp okta"
-alias q="exit"
-alias py="python"
 
+# `pass otp` alias
+potp () {
+  pass otp $1
+}
 # Personal Sripts
 mknote () {
   echo "# TITLE: $1\n\n# AUTHOR: luan-brav0\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
   nvim ./"$(date +"%y%m%d%H%M")--$1".md
 }
+
+# sync existing git repository
+gsync (){
+  git add -A
+  git commit -m $1
+  git push
+}
+
 # Fix del key (set as ^H)
+#
 bindkey "^H" delete-char
 # Fix backspace key (set as ^H) 
 bindkey "^M" accept-line
 
+if [ -d "$HOME/.local/share/adb-fastboot/platform-tools" ] ; then
+  export PATH="$HOME/.local/share/adb-fastboot/platform-tools:$PATH"
+fi
 
 # MUST REMAIN LAST! : ZSH Highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 
+# MUST REMAIN LAST!
 # pnpm
 export PNPM_HOME="/home/lul/.local/share/pnpm"
 case ":$PATH:" in
