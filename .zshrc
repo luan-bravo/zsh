@@ -8,7 +8,7 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 #Android 
-export ANDROID_HOME=$HOME/Library/Android/sdk
+export ANDROID_HOME=$HOME/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 # set name of the theme to load --- if set to "random", it will
