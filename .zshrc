@@ -130,7 +130,8 @@ alias xta="exa -l -a -h -n -T -s='type' --icons"
 alias py="python"
 alias pacman="pacman --color=auto"
 alias yay="yay --color=auto"
-
+alias paru="paru --color=auto"
+alias ala="alacritty; clear"
 
 # `pass otp` alias
 potp () {
