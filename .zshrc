@@ -132,6 +132,7 @@ alias pacman="pacman --color=auto"
 alias yay="yay --color=auto"
 alias paru="paru --color=auto"
 alias ala="alacritty; clear"
+alias gap="git add -p"
 
 # `pass otp` alias
 potp () {
