@@ -146,7 +146,7 @@ mknote () {
 
 # sync existing git repository
 gsync (){
-  git add -A
+  git add -p
   git commit -m $1
   git push
 }
