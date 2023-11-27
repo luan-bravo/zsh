@@ -2,7 +2,8 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/lul/.config/zsh/oh-my-zsh/"
+export ZSH="$ZDOTDIR/ohmyzsh"
+export ZSH_CUSTOM="$ZDOTDIR/custom"
 
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
@@ -138,6 +139,7 @@ alias gap="git add -p"
 potp () {
   pass otp $1
 }
+
 # Personal Sripts
 mknote () {
   echo "# TITLE: $1\n\n# AUTHOR: luan-brav0\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
