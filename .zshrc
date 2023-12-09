@@ -149,7 +149,7 @@ mknote () {
 # sync existing git repository
 gsync (){
   git add -p
-  git commit -m $1
+  git commit $1
   git push
 }
 
