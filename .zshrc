@@ -12,6 +12,11 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export ANDROID_HOME=$HOME/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+# Fly.io
+export FLYCTL_INSTALL="/home/lul/.fly"
+export PATH="$FLYCTL_INSTALL/bin:$PATH"
+
 # set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
