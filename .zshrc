@@ -2,6 +2,11 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
+# if there is a directory called ohmyzsh, create it at $ZDOTDIR location
+if [ ! -d "$ZDOTDIR/ohmyzsh" ]; then
+  git clone https://github.com/ohmyzsh/ohmyzsh.git $ZDOTDIR/ohmyzsh
+fi
+
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_CUSTOM="$ZDOTDIR/custom"
 
