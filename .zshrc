@@ -117,21 +117,26 @@ fi
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
+
+# ALIASES
+
+# Clean your room
+alias c="clear"
 alias q="exit"
 alias py="python"
 alias zshconfig="nvim $ZDOTDIR/.zshrc"
 alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
-# Better and easier than nvim
+
 # alias hx="helix"
-# Clean your room
-alias c="clear"
-# Let get this over with
-alias gs="git status"
+
+# git
 alias gaa="git add -A"
+alias gs="git status"
 alias gcm="git commit -m"
-alias gpm="git push"
+alias gp="git push"
+alias gcl= "git clone"
+alias gclr= "git clone --recurse-submodules"
+
 # Fix overscan (when using old HDMI TV as monitor)
 alias osfix="xrandr --output HDMI-A-0 --set underscan on & xrandr --output HDMI-A-0 --set 'underscan hborder' 80 --set 'underscan vborder' 40"
 alias x="exa -l -h -n -s='type' --icons"
@@ -139,10 +144,6 @@ alias xt="exa -l -h -n -T -s='type' --icons"
 alias xa="exa -l -a -h -n -s='type' --icons"
 alias xta="exa -l -a -h -n -T -s='type' --icons"
 alias py="python"
-alias pacman="pacman --color=auto"
-alias yay="yay --color=auto"
-alias paru="paru --color=auto"
-alias ala="alacritty; clear"
 alias gap="git add -p"
 
 # `pass otp` alias
@@ -159,7 +160,7 @@ mknote () {
 # sync existing git repository
 gsync (){
   git add -p
-  git commit $1
+  git commit
   git push
 }
 
@@ -185,3 +186,6 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+
+# bun completions
+[ -s "/home/lul/.bun/_bun" ] && source "/home/lul/.bun/_bun"
