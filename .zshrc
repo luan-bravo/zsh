@@ -7,6 +7,20 @@ if [ ! -d "$ZDOTDIR/ohmyzsh" ]; then
   git clone https://github.com/ohmyzsh/ohmyzsh.git $ZDOTDIR/ohmyzsh
 fi
 
+# TODO: fix this shite | doing it manually for now
+# if [ -d "/etc/X11/xorg.conf.d/" ] && [ ! -f "/etc/X11/xorg.conf.d/90-touchpad.conf" ]; then
+#   cat > "/etc/X11/xorg.conf.d/90-touchpad.conf" <<- eom
+#     Section "InputClass"
+#         Identifier "touchpad"
+#         MatchIsTouchpad "on"
+#         Driver "libinput"
+#         Option "Tapping" "on"
+#         Option "NaturalScrolling" "true"
+#         Option "TappingButtonMap" "lrm" # 1/2/3 finger, for 3-finger middle lrm
+#     EndSection
+#   eom
+# fi
+
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_CUSTOM="$ZDOTDIR/custom"
 
@@ -120,14 +134,17 @@ fi
 
 # ALIASES
 
+alias zshconfig="nvim $ZDOTDIR/.zshrc"
+alias zconfig="nvim ~/.config/zsh/.zshrc"
+alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
+alias nvimconfig="nvim ~/.config/nvim"
+
 # Clean your room
 alias c="clear"
 alias q="exit"
 
 alias py="python"
 
-alias zshconfig="nvim $ZDOTDIR/.zshrc"
-alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
 
 # not that great. nvim ftw
 # alias hx="helix"
