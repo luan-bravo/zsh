@@ -123,16 +123,22 @@ fi
 # Clean your room
 alias c="clear"
 alias q="exit"
+
 alias py="python"
+
 alias zshconfig="nvim $ZDOTDIR/.zshrc"
 alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
 
+# not that great. nvim ftw
 # alias hx="helix"
 
 # git
 alias gaa="git add -A"
+alias gap="git add -p"
 alias gs="git status"
+alias gc="git commit"
 alias gcm="git commit -m"
+alias gcma="git commit -am"
 alias gp="git push"
 alias gcl= "git clone"
 alias gclr= "git clone --recurse-submodules"
@@ -140,26 +146,19 @@ alias gclr= "git clone --recurse-submodules"
 # Fix overscan (when using old HDMI TV as monitor)
 alias osfix="xrandr --output HDMI-A-0 --set underscan on & xrandr --output HDMI-A-0 --set 'underscan hborder' 80 --set 'underscan vborder' 40"
 
+# iwd wifi manager aliases
 alias iwpower="rfkill unblock all && iwctl device wlan0 set-property Powered on"
 alias iwshow="iwctl station wlan0 show"
 alias iwscan="iwctl station wlan0 get-networks"
+
+# exa aliases - rust based ls like
 alias x="exa -l -h -n -s='type' --icons"
 alias xt="exa -l -h -n -T -s='type' --icons"
 alias xa="exa -l -a -h -n -s='type' --icons"
 alias xta="exa -l -a -h -n -T -s='type' --icons"
-alias py="python"
-alias gap="git add -p"
 
-# `pass otp` alias
-potp () {
-  pass otp $1
-}
-
-# Personal Sripts
-mknote () {
-  echo "# TITLE: $1\n\n# AUTHOR: luan-brav0\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
-  nvim ./"$(date +"%y%m%d%H%M")--$1".md
-}
+alias huebr="setxkbmap br"
+alias merica="setxkbmap us"
 
 # sync existing git repository
 gsync (){
@@ -167,10 +166,22 @@ gsync (){
   git commit
   git push
 }
+# `pass otp` alias
+
+potp () {
+  pass otp $1
+}
+
+# Personal Sripts
+mknote () {
+  echo "# TITLE: $1\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
+  nvim ./"$(date +"%y%m%d%H%M")--$1".md
+}
+
 
 # Fix del key (set as ^H)
-#
 bindkey "^H" delete-char
+
 # Fix backspace key (set as ^H) 
 bindkey "^M" accept-line
 
@@ -178,10 +189,10 @@ if [ -d "$HOME/.local/share/adb-fastboot/platform-tools" ] ; then
   export PATH="$HOME/.local/share/adb-fastboot/platform-tools:$PATH"
 fi
 
-# MUST REMAIN LAST! : ZSH Highlighting
+# MUST REMAIN AT END!
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 
-# MUST REMAIN LAST!
+# MUST REMAIN AT END!
 # pnpm
 export PNPM_HOME="/home/lul/.local/share/pnpm"
 case ":$PATH:" in
@@ -191,5 +202,6 @@ esac
 # pnpm end
 
 
+# MUST REMAIN AT END!
 # bun completions
 [ -s "/home/lul/.bun/_bun" ] && source "/home/lul/.bun/_bun"
