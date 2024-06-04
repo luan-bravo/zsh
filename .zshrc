@@ -139,6 +139,10 @@ alias gclr= "git clone --recurse-submodules"
 
 # Fix overscan (when using old HDMI TV as monitor)
 alias osfix="xrandr --output HDMI-A-0 --set underscan on & xrandr --output HDMI-A-0 --set 'underscan hborder' 80 --set 'underscan vborder' 40"
+
+alias iwpower="rfkill unblock all && iwctl device wlan0 set-property Powered on"
+alias iwshow="iwctl station wlan0 show"
+alias iwscan="iwctl station wlan0 get-networks"
 alias x="exa -l -h -n -s='type' --icons"
 alias xt="exa -l -h -n -T -s='type' --icons"
 alias xa="exa -l -a -h -n -s='type' --icons"
