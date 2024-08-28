@@ -176,6 +176,7 @@ alias xta="exa -l -a -h -n -T -s='type' --icons"
 
 alias huebr="setxkbmap br"
 alias merica="setxkbmap us"
+alias inter="setxkbmap -layout us -variant intl"
 
 # sync existing git repository
 gsync (){
@@ -215,7 +216,8 @@ export PNPM_HOME="/home/lul/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
+[ -s "/home/lul/.bun/_bun" ] && source "/home/lul/.bun/_bun"
+
 # pnpm end
 
 
