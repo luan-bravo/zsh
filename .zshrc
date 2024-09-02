@@ -27,7 +27,7 @@ export ZSH_CUSTOM="$ZDOTDIR/custom"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-#Android 
+#Android
 export ANDROID_HOME=$HOME/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
@@ -143,6 +143,8 @@ alias nvimconfig="nvim ~/.config/nvim"
 alias c="clear"
 alias q="exit"
 
+alias stdn="shutdown now"
+
 alias py="python"
 
 
@@ -200,7 +202,7 @@ mknote () {
 # Fix del key (set as ^H)
 bindkey "^H" delete-char
 
-# Fix backspace key (set as ^H) 
+# Fix backspace key (set as ^H)
 bindkey "^M" accept-line
 
 if [ -d "$HOME/.local/share/adb-fastboot/platform-tools" ] ; then
