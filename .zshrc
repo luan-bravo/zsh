@@ -1,3 +1,4 @@
+export ZDOTDIR="$HOME/.config/zsh"
 if [ ! -d "$ZDOTDIR/ohmyzsh" ]; then
     git clone https://github.com/ohmyzsh/ohmyzsh.git $ZDOTDIR/ohmyzsh
 fi
