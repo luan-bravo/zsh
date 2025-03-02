@@ -1,7 +1,4 @@
 export ZDOTDIR="$HOME/.config/zsh"
-if [ ! -d "$ZDOTDIR/ohmyzsh" ]; then
-    git clone https://github.com/ohmyzsh/ohmyzsh.git $ZDOTDIR/ohmyzsh
-fi
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_CUSTOM="$ZDOTDIR/custom"
 
@@ -12,9 +9,22 @@ plugins=(
     git
     z
     fzf
+    man
+    tldr
+    gh
+    archlinux
+    arduino-cli
+    npm
+    bun
+    tmux
+    rust
 )
 
+if ! [ -e $ZDOTDIR/oh-my-zsh.sh ]; then
+    git submodule update --init
+fi
 source $ZSH/oh-my-zsh.sh
+
 if [[ -n $SSH_CONNECTION ]]; then
     export EDITOR='nvim'
 else
@@ -109,25 +119,25 @@ if [ -d "$HOME/.local/share/adb-fastboot/platform-tools" ] ; then
 fi
 
 # MUST REMAIN AT END!
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
-export PNPM_HOME="/home/lul/.local/share/pnpm"
-case ":$PATH:" in
-    *":$PNPM_HOME:"*) ;;
-    *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-if [ -s "/home/lul/.bun/_bun" ]; then
-    source "/home/lul/.bun/_bun"
-fi
+source $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 
+if [ -s "$HOME/.bun/_bun" ]; then
+    source "$HOME/.bun/_bun"
+fi
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 export ANDROID_HOME=$HOME/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-export FLYCTL_INSTALL="/home/lul/.fly"
+
+export FLYCTL_INSTALL="$HOME/.fly"
 export PATH="$FLYCTL_INSTALL/bin:$PATH"
 
-# Turso
-export PATH="$PATH:/home/lul/.turso"
-#source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+export PATH="$PATH:$HOME/.turso"
+
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
