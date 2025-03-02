@@ -75,6 +75,7 @@ gsubsinit(){
         fi
       fi
     done
+    git submodule update --init
 }
 
 # exa aliases - ls made with rust
