@@ -66,6 +66,17 @@ gsync (){
     git push
 }
 
+gsubsinit(){
+    for dir in */; do
+      if git -C "$dir" rev-parse 2>/dev/null; then
+        url=$(git -C "$dir" config --get remote.origin.url)
+        if [ -n "$url" ]; then
+            git submodule add --force "$url" "$dir"
+        fi
+      fi
+    done
+}
+
 # exa aliases - ls made with rust
 alias x="exa -l -h -n -s='type' --icons"
 alias xt="exa -l -h -n -T -s='type' --icons"
