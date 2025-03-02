@@ -130,7 +130,7 @@ function +vi-git-st() {
 
   (( $modified )) && gitstatus+=( "%{\033[1m%}${modified}\uf044" )
   (( $staged )) && gitstatus+=( "%{\033[1m%}${staged}\uf046" )
-  (( $untracked )) && gitstatus+=( "%{\033[1m%}${untracked}\uf128" )
+  (( $untracked )) && gitstatus+=( "%{\033[1m%}${untracked}\ueb32" )
   (( $ahead )) && gitstatus+=( '' )
   (( $behind )) && gitstatus+=( '' )
 
