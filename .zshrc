@@ -99,7 +99,6 @@ potp () {
     pass otp $1
 }
 
-# Personal Sripts
 mknote () {
     echo "# TITLE: $1\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
     nvim ./"$(date +"%y%m%d%H%M")--$1".md
@@ -132,6 +131,8 @@ fi
 
 # MUST REMAIN AT END!
 source $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+
+export GIT_CONFIG_GLOBAL=$HOME/.config/.gitconfig
 
 if [ -s "$HOME/.bun/_bun" ]; then
     source "$HOME/.bun/_bun"
