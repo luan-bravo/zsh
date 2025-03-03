@@ -20,8 +20,11 @@ plugins=(
     rust
 )
 
-if ! [ -e $ZDOTDIR/oh-my-zsh.sh ]; then
-    git submodule update --init
+if ! [ -e $ZSH/oh-my-zsh.sh ]; then
+    echo "No 'oh-my-zsh.sh' file found. Attempting to update zsh config folder submodules"
+    pushd $ZDOTDIR > /dev/null
+    git submodule update --init -f --recursive
+    popd > /dev/null
 fi
 source $ZSH/oh-my-zsh.sh
 
