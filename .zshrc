@@ -122,12 +122,6 @@ idf () {
     idf.py $@
 }
 
-# Fix del key (set as ^H)
-bindkey "^H" delete-char
-
-# Fix backspace key (set as ^H)
-bindkey "^M" accept-line
-
 if [ -d "$HOME/.local/share/adb-fastboot/platform-tools" ] ; then
     export PATH="$HOME/.local/share/adb-fastboot/platform-tools:$PATH"
 fi
