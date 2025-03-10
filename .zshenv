@@ -3,6 +3,8 @@ export ZSH_CUSTOM="$ZDOTDIR/custom"
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_THEME="gruvbox"
 
+export DOTFILES="$HOME/.config"
+
 # colors
 export red=$'\033[1;31m'
 export green=$'\033[1;32m'
