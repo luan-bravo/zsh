@@ -1,10 +1,18 @@
 # aliases by luan-brav0
 
 # easy config files
-alias zshconfig="nvim $ZDOTDIR/.zshrc"
-alias zconfig="nvim $ZDOTDIR/.zshrc"
-alias ohmyzsh="nvim $ZSH/oh-my-zsh.sh"
-alias nvimconfig="nvim $HOME/config/nvim"
+zshconfig() {
+    pushd $ZDOTDIR > /dev/null
+    nvim .
+    popd > /dev/null
+}
+alias zconfig="zshconfig"
+# alias nvimconfig="nvim $HOME/config/nvim"
+nvimconfig() {
+    pushd $DOTFILES/nvim > /dev/null
+    nvim .
+    popd > /dev/null
+}
 
 alias c="clear" # Clean your room
 alias q="exit"
