@@ -4,6 +4,7 @@ export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_THEME="gruvbox"
 
 export DOTFILES="$HOME/.config"
+export GH="https://github.com"
 
 # colors
 export red=$'\033[1;31m'
