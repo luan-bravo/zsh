@@ -72,16 +72,75 @@ alias huebr="setxkbmap br"
 alias merica="setxkbmap us"
 alias inter="setxkbmap -layout us -variant intl"
 
-potp () {
-    pass otp $1
+# easy access to frequently modified confi files
+zshconfig() {
+    pushd $ZDOTDIR > /dev/null
+    nvim .
+    popd > /dev/null
+}
+alias zconfig="zshconfig"
+
+# alias nvimconfig="nvim $HOME/config/nvim"
+nvimconfig() {
+    pushd $DOTFILES/nvim > /dev/null
+    nvim .
+    popd > /dev/null
 }
 
-mknote () {
+
+# note taking
+mknote() {
     echo "# TITLE: $1\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
     nvim ./"$(date +"%y%m%d%H%M")--$1".md
 }
 
-idf () {
+
+# push todo strings to todoFile (it was a very good source of shell scripting learning for me)
+todo() {
+    # set default global todofile or custom with '-f' flag
+    local todoFile="$TODOFILE"
+    while getopts "f:" opt; do
+        case $opt in
+            f)
+                todoFile="$OPTARG"
+            ;;
+            \?) echo "Invalid option: -$OPTARG" ;;
+        esac
+        # takes the flag argument out of the arg array
+        shift $((OPTIND - 1))
+    done
+
+    # if todoFile doesn't exists, create it
+    if [[ ! -f "$todoFile" ]]; then
+        echo "${yellow}No file $todoFile currently exists. Touching todoFile.${nc}"
+        touch "$todoFile"
+    fi
+    # adds a new line if there are already other todos in file
+    if [[ -s "$todoFile" ]]; then
+        echo "" >> "$todoFile"
+    fi
+
+    # MAIN LOOP
+    for arg in "$@"; do
+        if echo "- [ ] $arg" >> "$todoFile"; then
+            ((added++))
+        else
+            echo "todo: ${red}Error when trying to 'echo $arg' to $todoFile.${nc}"
+        fi
+    done
+
+
+    # Total incomplete todos
+    local todoCount=$(grep -v -i '^[[:space:]]*- \[[xX]\]' "$todoFile" | grep -v '^[[:space:]#]*$' | tee "$todoFile" | wc -l)
+    if $added; then
+        echo "todo: ${green}$added todos added out of $#! Total incomplete todos: $todoCount.${nc}"
+    else
+        echo "todo: ${red} No new todos added! Total incomplete todos: $todoCount.${nc}"
+    fi
+}
+
+
+idf() {
     if [ ! -x "$(command -v idf.py)" ]; then
         echo "no idf.py"
         if [ -z "$IDF_PATH" ] && [ -d "/opt/esp-idf" ]; then
