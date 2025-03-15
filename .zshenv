@@ -1,13 +1,15 @@
-export DOTFILES="$HOME/.config"
-export ZDOTDIR="$DOTFILES/zsh"
+export DOTDIR="$HOME/.config"
+export ZDOTDIR="$DOTDIR/zsh"
 export ZSH_CUSTOM="$ZDOTDIR/custom"
+export GIT_CONFIG_GLOBAL=$DOTDIR/git/.gitconfig
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_THEME="gruvbox"
 
 
 # personal paths and variables
 export GH="https://github.com"
-export TODOFILE="$HOME/Notes/todo.md"
+export NOTES="$HOME/notes"
+export TODOFILE="$NOTES/todo.md"
 
 
 # colors
