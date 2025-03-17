@@ -14,6 +14,8 @@ plugins=(
     bun
     tmux
     rust
+    zsh-autosuggestions
+    zsh-syntax-highlighting
 )
 if  [[ ! -f "$ZSH/oh-my-zsh.sh" ]]; then
     echo "${red}No 'oh-my-zsh.sh' file found. Attempting to update zsh config folder submodules${nc}"
