@@ -60,19 +60,23 @@ alias inter="setxkbmap -layout us -variant intl"
 
 # easy access to frequently modified confi files
 zshconfig() {
-    pushd $ZDOTDIR > /dev/null
+    pushd "$ZDOTDIR" > /dev/null || return 1
     nvim .
-    popd > /dev/null
+    popd > /dev/null || return 1
 }
 alias zconfig="zshconfig"
 alias zconf="zconfig"
 
 # alias nvimconfig="nvim $HOME/config/nvim"
 nvimconfig() {
-    pushd $DOTFILES/nvim > /dev/null
+    pushd "$DOTDIR/nvim" > /dev/null || return 1
     nvim .
-    popd > /dev/null
+    popd > /dev/null || return 1
 }
+alias nvimconf="nvimconfig"
+alias vimconfig="nvimconfig"
+alias vimconf="nvimconfig"
+
 
 
 # Note taking
@@ -132,6 +136,14 @@ todo() {
 }
 
 
+potp() {
+    [[ $# -gt 1 ]] && {
+        echo "potp: ${red}Too many arguments.${nc}"; return 1
+    }
+    pass otp "$1"
+}
+
+
 # TODO: Check if this still is necessary or if just the alias is enough
 # Exporting and sourcing added to $ZSH_CUSTOM/exports.zsh file
 alias idf="idf.py"
@@ -152,9 +164,3 @@ idf() {
     idf.py "$*"
 }
 IDF
-
-
-potp() {
-    [[ $# -gt 1 ]] && { echo "potp: ${red}Too many arguments.${nc}"; return 1 }
-    pass otp "$1"
-}
