@@ -221,7 +221,7 @@ build_prompt() {
 
 ## Right prompt (date and time with \ue0b2)
 build_rprompt() {
-  clock_separator="%{%F{15}%K{237}%}$RIGHT_SEPARATOR"
+  clock_separator="%{%F{15}%K{235}%}$RIGHT_SEPARATOR"
   clock="%{%F{237}%K{15}%} $(date '+%H:%M:%S') "
 
   rprompt=$clock_separator$clock
