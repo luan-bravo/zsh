@@ -1,7 +1,7 @@
 export DOTDIR="$HOME/.config"
 export ZDOTDIR="$DOTDIR/zsh"
 export ZSH_CUSTOM="$ZDOTDIR/custom"
-export GIT_CONFIG_GLOBAL=$DOTDIR/git/.gitconfig
+export GIT_CONFIG_GLOBAL=$DOTDIR/git/gitconfig
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_THEME="gruvbox"
 
