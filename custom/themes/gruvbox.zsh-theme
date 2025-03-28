@@ -197,14 +197,15 @@ prompt_root() {
 # Status: Error and jobs
 prompt_status() {
   local -a symbols
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{1}%}󰜺"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{15}%}\ufb36"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{235}%}󰜺 $RETVAL"
+  [[ $JOBS -gt 0 ]] && symbols+="%{%F{235}%}\ufb36 $JOBS"
   [[ -n "$symbols" ]] && prompt_segment 166 7 "$symbols"
 }
 
 ## Main prompt (left side)
 build_prompt() {
   RETVAL=$?
+  JOBS=$(jobs -l | wc -l)
   prompt_status
   prompt_os
   prompt_dir
