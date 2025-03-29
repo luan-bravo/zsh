@@ -223,7 +223,7 @@ build_prompt() {
 ## Right prompt (date and time with \ue0b2)
 build_rprompt() {
   # echo -n "%{%F{237}%K{235}%}$RIGHT_SEPARATOR%{%F{7}%K{237}%} $(date '+%d/%m/%y - %H:%M:%S') "
-  clock_separator="%{%F{15}%K{235}%}$RIGHT_SEPARATOR"
+  clock_separator="%{%F{15}%K{235}%}%{$RIGHT_SEPARATOR%}"
   clock="%{%F{237}%K{15}%} $(date '+%H:%M:%S') "
 
   rprompt=$clock_separator$clock
@@ -231,4 +231,4 @@ build_rprompt() {
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
-RPROMPT='$(build_rprompt)'
+RPROMPT='$(build_rprompt)%{%f%b%k%}'
