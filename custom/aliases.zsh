@@ -38,8 +38,10 @@ gsync (){
 
 
 # exa aliases - ls made with rust and a much nicer
-alias x="exa -l -h -n -s='type' --icons"
+alias x="eza -l -h -n -s='type' --icons"
+alias ll="x"
 alias xa="x -a"
+alias l="xa"
 alias xt="x -T"
 alias xta="xa -T"
 
