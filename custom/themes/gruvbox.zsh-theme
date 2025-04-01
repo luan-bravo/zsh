@@ -179,16 +179,15 @@ prompt_root() {
 prompt_status() {
     local -a symbols
     [[ $RETVAL -ne 0 ]] && symbols+="%{%F{235}%}󰜺 $RETVAL"
-    [[ $JOBS -ne 0 ]] && symbols+="%{%F{235}%}󰘷 $JOBS"
+    [[ $BG_JOBS -ne 0 ]] && symbols+="%{%F{235}%}󰘷 $BG_JOBS"
     # [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{15}%}󰘷" #󰘷
     [[ -n "$symbols" ]] && prompt_segment 166 7 "$symbols"
 }
 
 build_prompt() {
-    RETVAL=$?
-    JOBS=$(jobs -s | wc -l)
+    RETVAL="$?"
+    BG_JOBS=${#${(M)jobstates:#suspended:*}} # "$(jobs -s | wc -l)" doesn't work and has a weird behavior and only returns the right amount if not in the directory of the first suspended jobs (???)
     prompt_status
-    # prompt_os
     prompt_dir
     prompt_git
     prompt_go
