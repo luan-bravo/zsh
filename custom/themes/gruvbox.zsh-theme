@@ -175,18 +175,34 @@ prompt_root() {
     [[ $UID -eq 0 ]] && prompt_segment 11 0 "\uf0ad"
 }
 
-prompt_status() {
-    local -a symbols
-    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{235}%}󰜺 $RETVAL"
-    [[ $BG_JOBS -ne 0 ]] && symbols+="%{%F{235}%}󰘷 $BG_JOBS"
-    # [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{15}%}󰘷" #󰘷
-    [[ -n "$symbols" ]] && prompt_segment 166 7 "$symbols"
+prompt_errors() {
+    local -a errors
+    if [[ $RETVAL -ne 0 ]]; then
+        errors+="󰜺 "
+        if [[ $RETVAL -gt 1 ]]; then
+            errors+="$RETVAL"
+        fi
+    fi
+    # [[ $(jobs -l | wc -l) -gt 0 ]] && errors+="%{%F{15}%}󰘷" #󰘷
+    [[ -n "$errors" ]] && prompt_segment 1 11 "$errors"
+}
+
+prompt_jobs() {
+    local -a jbs
+    if [[ $BG_JOBS -ne 0 ]]; then
+        jbs+="󰘷 "
+        if [[ $BG_JOBS -gt 1 ]]; then
+            jbs+="$BG_JOBS"
+        fi
+    fi
+    [[ -n "$jbs" ]] && prompt_segment 14 0 "$jbs"
 }
 
 build_prompt() {
     RETVAL="$?"
+    prompt_errors
     BG_JOBS=${#${(M)jobstates:#suspended:*}} # "$(jobs -s | wc -l)" doesn't work and has a weird behavior and only returns the right amount if not in the directory of the first suspended jobs (???)
-    prompt_status
+    prompt_jobs
     prompt_dir
     prompt_git
     prompt_go
