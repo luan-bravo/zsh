@@ -1,5 +1,27 @@
 CURRENT_BG='NONE'
 
+### Colors
+## 0-14 colors based on the color scheme of your terminal
+# 0 black
+# 1 red
+# 2 green
+# 3 yellow
+# 4 blue
+# 5 purple
+# 6 dark green
+# 7 light gray
+# 8 dark gray
+# 9 orange
+# 10 light green
+# 11 light yellow
+# 12 light blue
+# 13 light pink
+# 14 light green / teal
+# 15 FF,FF,FF white
+# 16 0,0,0 black
+## + other more specific shades shades...
+
+
 case ${SOLARIZED_THEME:-dark} in
         light) CURRENT_FG='3';;
         *)     CURRENT_FG='0';;
@@ -34,29 +56,6 @@ prompt_end() {
     CURRENT_BG='NONE'
 }
 
-prompt_os() {
-    if [[ -s /etc/os-release ]]; then
-            local distro=$(. /etc/os-release && echo "$NAME" || echo "")
-    fi
-    local os_icon
-    case "$OSTYPE" in
-        linux*)
-            case "$distro" in
-                Arch*) os_icon="\uf303" ;; # 󰣇
-                Debian*) os_icon="\uf306" ;; # 󰣚
-                Ubuntu*) os_icon="\uebc9" ;; # 
-                Nix*) os_icon="\uf313" ;; # 
-                *) os_icon="\ue712" ;; # 
-            esac
-        ;;
-        darwin*) os_icon="\ue29e" ;; # 
-        *) os_icon="\ue712" ;; # 
-    esac
-    if [[ -n $WSL_DISTRO_NAME ]]; then
-        os_icon+=" @ wsl"
-    fi
-    [[ -n "$os_icon" ]] && prompt_segment 237 7 "$os_icon"
-}
 
 prompt_dir() {
     prompt_segment 4 $CURRENT_FG '%~'
