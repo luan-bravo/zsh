@@ -7,6 +7,7 @@ xpt() {
     [[ -d "$2" ]] && export "$1"="$2"
 }
 
+src $HOME/.bun/_bun
 
 xpt IDF_PATH "/opt/esp-idf"
 src "$IDF_PATH/export.sh"

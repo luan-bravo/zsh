@@ -50,6 +50,3 @@ if [[ -n $SSH_CONNECTION ]]; then
 else
     export EDITOR='vim'
 fi
-
-# bun completions
-[ -s "/home/lul/.bun/_bun" ] && source "/home/lul/.bun/_bun"
