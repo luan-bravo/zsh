@@ -31,7 +31,7 @@ prompt_end() {
         echo -n "%{%k%}"
     fi
     echo -n "%{%f%}"
-    CURRENT_BG=''
+    CURRENT_BG='NONE'
 }
 
 prompt_os() {
@@ -206,28 +206,18 @@ rprompt_segment() {
     local bg fg
     [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
     [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
-    if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-        echo -n " %{%K{$CURRENT_BG}%}%{%F{$1}%}$RIGHT_SEPARATOR%{$bg%}%{$fg%} "
-    else
-        echo -n "%{$bg%}%{$fg%} "
+    if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then # not the first rprompt
+        echo -n " %{%K{$CURRENT_BG}%F{$1}%}$RIGHT_SEPARATOR%{$bg$fg%} "
+    else # is first rprompt
+        echo -n "%{%k%F{$1}%}%{$RIGHT_SEPARATOR%}%{$bg$fg%} "
     fi
     CURRENT_BG=$1
     [[ -n $3 ]] && echo -n $3
 }
 
-rprompt_start() {
-    if [[ -n $CURRENT_BG ]]; then
-        echo -n " %{%k%F{$CURRENT_BG}%}$RIGHT_SEPARATOR"
-    else
-        echo -n "%{%k%}"
-    fi
-    echo -n "%{%f%}"
-    CURRENT_BG=''
-}
 
 rprompt_clock() {
-    echo -n "%{%K{235}%}%{%F{15}%}%{$RIGHT_SEPARATOR%}"
-    [[ -n $hour ]] && rprompt_segment 15 237 "$hour"
+    [[ -n $hour ]] && rprompt_segment 0 7 "$hour"
 }
 
 rprompt_os() {
@@ -236,23 +226,34 @@ rprompt_os() {
     case "$OSTYPE" in
         linux*)
             case "$distro" in
-                Arch*) os_icon="\uf303" ;; # 󰣇
-                Debian*) os_icon="\uf306" ;; # 󰣚
-                Ubuntu*) os_icon="\uebc9" ;; # 
-                Nix*) os_icon="\uf313" ;; # 
-                *) os_icon="\ue712" ;; # 
+                Arch*)
+                    os_color=4
+                    os_icon="%{%F{$os_color}%}\uf303%{%f%}" ;; # 󰣇
+                Debian*)
+                    os_color=1
+                    os_icon="%{%F{$os_color}%}\uf306%{%f%}" ;; # 󰣚
+                Ubuntu*)
+                    os_color=5
+                    os_icon="%{%F{$os_color}%}\uf306%{%f%}" ;; # 
+                Nix*)
+                    os_color=12
+                    os_icon="%{%F{$os_color}%}\uf313%{%f%}" ;; # 
+                *)
+                    os_color=15
+                    os_icon="%{%F{$os_color}%}\ue712%{%f%}" ;; # 
             esac
         ;;
-        darwin*) os_icon="\ue29e" ;; # 
-        *) ;;
+        darwin*)
+            os_color=1
+            os_icon="%{%F{$os_color}%}\ue29e%{%f%}" ;; # 
+        *)
+            return ;;
     esac
-    [[ -n $WSL_DISTRO_NAME ]] && os_icon+=" @ wsl"
-    [[ -n "$os_icon" ]] && rprompt_segment 237 7 "$os_icon "
+    os_icon+=" " # Extra space for two-characters wide icons. Comment this if using mono spaced
+    [[ -n "$os_icon" ]] && rprompt_segment 237 "%k" "$os_icon "
 }
 
 build_rprompt() {
-    # TODO: Figure a way to get the next rprompt bg value to pass as fg of rprompt_start
-    # rprompt_start
     hour="$(date '+%H:%M:%S')"
     rprompt_clock
     rprompt_os
