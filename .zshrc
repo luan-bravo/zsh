@@ -19,9 +19,9 @@ plugins=(
 )
 if  [[ ! -f "$ZSH/oh-my-zsh.sh" ]]; then
     echo "${red}No 'oh-my-zsh.sh' file found. Attempting to update zsh config folder submodules${nc}"
-    pushd "$ZDOTDIR" > /dev/null || return 1
+    pushd "$ZDOTDIR" > /dev/null || { echo "${red}pushd $ZDOTDIR failed${nc}" && return 1 }
     git submodule update --init -f
-    popd > /dev/null || return 1
+    popd > /dev/null || { echo "${red}popd $ZDOTDIR failed${nc}" && return 1 }
     [[ -s "$ZSH/oh-my-zsh.sh" ]] || echo "${green}ZSH submodules updated. ${yellow}Please, run 'exec zsh' to see applied changes${nc}"
 else
     source "$ZSH/oh-my-zsh.sh" || echo "${red}Could not source 'oh-my-zsh.sh' file${nc}"

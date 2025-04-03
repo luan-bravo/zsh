@@ -62,18 +62,18 @@ alias inter="setxkbmap -layout us -variant intl"
 
 # easy access to frequently modified confi files
 zshconfig() {
-    pushd "$ZDOTDIR" > /dev/null || return 1
+    pushd "$ZDOTDIR" > /dev/null || { echo "${red}pushd \$ZDOTDIR failed${nc}" && return 1 }
     nvim .
-    popd > /dev/null || return 1
+    popd > /dev/null || {echo "${red}popd \$ZDOTDIR failed${nc}" && return 1 }
 }
 alias zconfig="zshconfig"
 alias zconf="zconfig"
 
 # alias nvimconfig="nvim $HOME/config/nvim"
 nvimconfig() {
-    pushd "$DOTDIR/nvim" > /dev/null || return 1
+    pushd "$DOTDIR/nvim" > /dev/null || { echo "${red}pushd \$DORDIR/nvim failed${nc}" && return 1 }
     nvim .
-    popd > /dev/null || return 1
+    popd > /dev/null || { echo "${red}popd \$DORDIR/nvim failed${nc}" && return 1 }
 }
 alias nvimconf="nvimconfig"
 alias vimconfig="nvimconfig"
@@ -139,8 +139,8 @@ todo() {
 
 
 potp() {
-    [[ $# -gt 1 ]] && {
-        echo "potp: ${red}Too many arguments.${nc}"; return 1
+    [[ $# -ne 1 ]] && {
+        echo "potp: ${red}Please provide (only) one argument${nc}" && return 1
     }
     pass otp "$1"
 }
