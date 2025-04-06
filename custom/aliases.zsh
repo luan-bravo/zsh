@@ -61,27 +61,27 @@ alias huebr="setxkbmap br"
 alias merica="setxkbmap us"
 alias inter="setxkbmap -layout us -variant intl"
 
-# easy access to frequently modified confi files
-zshconfig() {
-    pushd "$ZDOTDIR" > /dev/null || { echo "${red}pushd \$ZDOTDIR failed${nc}" && return 1 }
-    nvim .
-    popd > /dev/null || {echo "${red}popd \$ZDOTDIR failed${nc}" && return 1 }
+
+# easy access to frequently modified config files
+viedit() {
+    [[ $# -eq 0 ]] && echo 'nvim -c "cd $1" $1'
+    [[ $# -ne 0 ]] && { echo 'error: usage: config </path/to/config>' || return 1 }
+    nvim -c "cd $1" $1
 }
+
+alias zshconfig="viedit $ZDOTDIR"
 alias zconfig="zshconfig"
 alias zconf="zconfig"
 
-# alias nvimconfig="nvim $HOME/config/nvim"
-nvimconfig() {
-    pushd "$DOTDIR/nvim" > /dev/null || { echo "${red}pushd \$DORDIR/nvim failed${nc}" && return 1 }
-    nvim .
-    popd > /dev/null || { echo "${red}popd \$DORDIR/nvim failed${nc}" && return 1 }
-}
+alias nvimconfig="viedit $DOTDIR/nvim"
 alias nvimconf="nvimconfig"
 alias vimconfig="nvimconfig"
 alias vimconf="nvimconfig"
+alias viconf="nvimconfig"
+alias vconf="nvimconfig"
+alias vconfig="nvimconfig"
 
-
-
+#
 # Note taking
 mknote() {
     echo "# TITLE: $1\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
