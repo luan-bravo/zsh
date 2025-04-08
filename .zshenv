@@ -1,18 +1,21 @@
 export DOTDIR="$HOME/.config"
+
 export ZDOTDIR="$DOTDIR/zsh"
 export ZSH_CUSTOM="$ZDOTDIR/custom"
-export GIT_CONFIG_GLOBAL=$DOTDIR/git/gitconfig
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_THEME="gruvbox"
 
+# Other apps
+export GIT_CONFIG_GLOBAL="$DOTDIR/git/gitconfig"
+export RUSTC_WRAPPER="$(which sccache)"
 
-# personal paths and variables
+# Personal paths and variables
 export GH="https://github.com"
 export NOTES="$HOME/notes"
 export TODOFILE="$NOTES/todo.md"
 
 
-# colors
+# Colors
 export nc=$'\033[0m' # no coloring
 export red=$'\033[1;31m'
 export yellow=$'\033[1;33m'
