@@ -4,7 +4,7 @@
 alias c="clear" # Clean your room
 alias q="exit"
 alias f="fg"
-
+alias xzsh="exec zsh"
 alias nv="nvim"
 alias v="nvim"
 
