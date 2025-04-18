@@ -1,7 +1,7 @@
 # ZSH base configuration
-
 # oh-my-zsh
 plugins=(
+    # from ohmyzsh
     git
     z
     fzf
@@ -14,9 +14,11 @@ plugins=(
     bun
     tmux
     rust
+    # from ./custom/plugins/
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
+
 if  [[ ! -f "$ZSH/oh-my-zsh.sh" ]]; then
     echo "${red}No 'oh-my-zsh.sh' file found. Attempting to update zsh config folder submodules${nc}"
     pushd "$ZDOTDIR" > /dev/null || { echo "${red}pushd $ZDOTDIR failed${nc}" && return 1 }
@@ -42,11 +44,4 @@ else
     else
         echo "${red}Could not create '.zshenv' symlink in home directory.${nc}"
     fi
-fi
-
-
-if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR='nvim'
-else
-    export EDITOR='vim'
 fi
