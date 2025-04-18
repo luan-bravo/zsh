@@ -4,7 +4,7 @@ src() { [[ -f "$1" ]] && source "$1" }
 xpt() { [[ -d "$2" ]] && export "$1"="$2" }
 nvr() { [[ -d "$1" ]] && export PATH="$PATH:$1" }
 
-src $HOME/.bun/_bun
+src "$HOME/.bun/_bun"
 
 xpt IDF_PATH "/opt/esp-idf"
 src "$IDF_PATH/export.sh"
