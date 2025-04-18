@@ -23,18 +23,25 @@ del() {
 # Git
 alias gaa="git add -A"
 alias gap="git add -p"
-alias gs="git status"
-alias gc="git commit"
+alias gs="git status --short"
+alias gsv="git status"
+alias gsvv="git status --verbose"
+alias gc="git commit --verbose"
+alias gcs="git commit"
 alias gcm="git commit -m"
 alias gcam="git commit -am"
 alias gp="git push"
-alias gcl= "git clone"
-alias gclr= "git clone --recurse-submodules"
-
-gsync (){
-    git add -p
-    git commit
-    git push
+alias gcl="git clone --recurse-submodules"
+alias gsubup="git submodule sync && git submodule update --remote"
+gsync() {
+    gap && gc && gp
+}
+gclgh() {
+    if [[ "$1" == *"/"* ]]; then
+        gcl "https://github.com/$1"
+    else
+        gcl "https://github.com/luan-bravo/$1"
+    fi
 }
 
 
