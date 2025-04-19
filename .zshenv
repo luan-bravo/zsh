@@ -21,26 +21,36 @@ export TODOFILE="$NOTES/todo.md"
 
 
 # Colors
+export -a colors
 export nc=$'\033[0m'
+colors+=("$nc")
+export black=$'\033[0;30m'
+colors+=("$black")
+export dark_red=$'\033[0;31m'
+colors+=("$dark_red")
+export dark_green=$'\033[0;32m'
+colors+=("$dark_green")
+export orange=$'\033[0;33m'
+colors+=("$orange")
+export dark_blue=$'\033[0;34m'
+colors+=("$dark_blue")
+export dark_purple=$'\033[0;35m'
+colors+=("$dark_purple")
+export dark_cyan=$'\033[0;36m'
+colors+=("$dark_cyan")
+export gray=$'\033[0;37m'
+colors+=("$gray")
 export red=$'\033[1;31m'
-export yellow=$'\033[1;33m'
+colors+=("$red")
 export green=$'\033[1;32m'
-
-: << 'COLORS'
-Black        0;30
-Red          0;31
-Green        0;32
-Brown/Orange 0;33
-Blue         0;34
-Purple       0;35
-Cyan         0;36
-Light Gray   0;37
-Dark Gray     0;30
-Light Red     1;31
-Light Green   1;32
-Yellow        1;33
-Light Blue    1;34
-Light Purple  1;35
-Light Cyan    1;36
-White         1;37
-COLORS
+colors+=("$green")
+export yellow=$'\033[1;33m'
+colors+=("$yellow")
+export blue=$'\033[1;34m'
+colors+=("$blue")
+export purple=$'\033[1;35m'
+colors+=("$purple")
+export cyan=$'\033[1;36m'
+colors+=("$cyan")
+export white=$'\033[1;37m'
+colors+=("$white")
