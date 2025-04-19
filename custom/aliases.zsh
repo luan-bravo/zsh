@@ -98,6 +98,7 @@ alias xa="x -a"
 alias l="xa"
 alias xt="x -T"
 alias xta="xa -T"
+alias xtd="xa -TD"
 
 
 # Fix overscan (when using old HDMI TV as monitor)
