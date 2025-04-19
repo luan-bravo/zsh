@@ -42,7 +42,29 @@ echocol() {
 alias ec="echocol"
 
 del() {
-    mv "$*" "$HOME/.trash"
+    if [[ -n $TRASH ]]; then
+        $trash=$TRASH
+    else
+        export trash="$HOME/.trash"
+    fi
+    if [[ -d "$trash" ]]; then
+        throwaway() {
+            # TODO: create/rename to another file/dir if there is already a file with the same name in .trash
+            mv "$1" "$2" || {
+                ec ${red} "Failed to move ${green}$1{COLOR} into ${green}$2{COLOR}."
+                return 1
+            }
+        }
+        throwaway $* $trash
+    else
+        ec ${red} "Directory ${green}${trash}{COLOR} does not exist."
+        ec ${yellow} "Creating ${green}${trash}{COLOR}..."
+        md $trash || {
+            ec ${red} "Failed to create ${green}${trash}{COLOR}."
+            return 1
+        }
+        throwaway $* $trash
+    fi
 }
 
 # Git
