@@ -100,38 +100,20 @@ alias xt="x -T"
 alias xta="xa -T"
 alias xtd="xa -TD"
 
-
-# Fix overscan (when using old HDMI TV as monitor)
-alias osfix="xrandr --output HDMI-A-0 --set underscan on & xrandr --output HDMI-A-0 --set 'underscan hborder' 80 --set 'underscan vborder' 40"
-
-
-# iwd wifi manager aliases
-alias iwpower="rfkill unblock all && iwctl device wlan0 set-property Powered on"
-alias iwshow="iwctl station wlan0 show"
-alias iwscan="iwctl station wlan0 get-networks"
-
-# Keyboard layouts
-alias huebr="setxkbmap br"
-alias merica="setxkbmap us"
-alias inter="setxkbmap -layout us -variant intl"
-
-
-# easy access to frequently modified config files
-viedit() {
-    [[ $# -eq 0 ]] && echo 'nvim -c "cd $1" $1'
-    [[ $# -ne 0 ]] && { echo 'error: usage: config </path/to/config>' || return 1 }
+# Easy access to frequently modified config files
+editproj() {
+    if [[ $# -ne 1 ]] || [[ ! -d $1 ]]; then
+        ec ${yellow} "usage: editproj ${green}</path/to/project>{COLOR}" && return 1
+    fi
     nvim -c "cd $1" $1
 }
-
-alias zshconfig="viedit $ZDOTDIR"
+alias zshconfig="editproj $ZDOTDIR"
 alias zconfig="zshconfig"
 alias zconf="zconfig"
-
-alias nvimconfig="viedit $DOTDIR/nvim"
+alias nvimconfig="editproj $DOTDIR/nvim"
 alias nvimconf="nvimconfig"
-alias vimconfig="nvimconfig"
-alias vimconf="nvimconfig"
-alias viconf="nvimconfig"
+alias nvconf="nvimconfig"
+alias nvconfig="nvimconfig"
 alias vconf="nvimconfig"
 alias vconfig="nvimconfig"
 
