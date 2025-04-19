@@ -119,7 +119,8 @@ alias vconfig="nvimconfig"
 
 # Note taking
 mknote() {
-    echo "# TITLE: $1\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
+    echo "# TITLE: $1\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" \
+        >> ./"$(date +"%y%m%d%H%M")--$1".md
     nvim ./"$(date +"%y%m%d%H%M")--$1".md
 }
 
@@ -139,7 +140,7 @@ todo() {
     done
     # If todoFile doesn't exists, create it
     if [[ ! -f "$todoFile" ]]; then
-        echo "${yellow}No file $todoFile currently exists. Touching todoFile.${nc}"
+        ec ${yellow} "No file $todoFile currently exists. Touching todoFile."
         touch "$todoFile"
     fi
     # Adds a new line if there are already other todos in file
@@ -151,27 +152,27 @@ todo() {
         if echo "- [ ] $arg" >> "$todoFile"; then
             ((added++))
         else
-            echo "todo: ${red}Error when trying to 'echo $arg' to $todoFile.${nc}"
+            ec ${red} "todo: Error when trying to 'echo $arg' to $todoFile."
         fi
     done
     # Total incomplete todos
     local todoCount=$(grep -c -v '^[[:space:]#]*$' "$todoFile")
     # Echo staturs
     if [[ $added -gt 0 ]]; then
-        echo "todo: ${green}$added todos added out of $#! Total incomplete todos: $todoCount.${nc}"
+        ec ${green} "todo: $added todos added out of $#! Total incomplete todos: $todoCount."
         return 0
     elif [[ $added -st $# ]]; then
-        echo "todo: ${yellow}$added todos added out of $#! Total incomplete todos: $todoCount.${nc}"
+        ec ${yellow} "todo: $added todos added out of $#! Total incomplete todos: $todoCount."
         return 1
     else
-        echo "todo: ${red} No new todos added! Total incomplete todos: $todoCount.${nc}"
+        ec ${red} "todo:  No new todos added! Total incomplete todos: $todoCount."
         return 1
     fi
 }
 
 potp() {
     [[ $# -ne 1 ]] && {
-        echo "potp: ${red}Please provide (only) one argument${nc}" && return 1
+        ec ${red} "potp: Please provide (only) one argument" && return 1
     }
     pass otp "$1"
 }
