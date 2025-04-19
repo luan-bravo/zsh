@@ -1,20 +1,24 @@
-# Aliases by luan-brav0
-
-# System aliases
+# System and shell
 alias c="clear" # Clean your room
 alias q="exit"
+alias stdn="shutdown now"
 alias f="fg"
 alias xzsh="exec zsh"
 alias nv="nvim"
 alias v="nvim"
-
-alias stdn="shutdown now"
-
 alias il="i3lock"
 alias py="python"
-# alias hx="helix" # not that great. nvim ftw
-
 alias ino="arduino-cli"
+# Fix overscan (when using old HDMI TV as monitor)
+alias osfix="xrandr --output HDMI-A-0 --set underscan on & xrandr --output HDMI-A-0 --set 'underscan hborder' 80 --set 'underscan vborder' 40"
+# IWD Wi-Fi manager aliases
+alias iwpower="rfkill unblock all && iwctl device wlan0 set-property Powered on"
+alias iwshow="iwctl station wlan0 show"
+alias iwscan="iwctl station wlan0 get-networks"
+# Keyboard layouts
+alias huebr="setxkbmap br"
+alias merica="setxkbmap us"
+alias inter="setxkbmap -layout us -variant intl"
 
 del() {
     mv "$*" "$HOME/.trash"
@@ -44,9 +48,8 @@ gclgh() {
     fi
 }
 
-
-# exa aliases - ls made with rust and a much nicer
-alias x="eza -l -h -n -s='type' --icons"
+# eza aliases (formerly for exa) - ls made with rust and a much nicer
+alias x="eza -lhn -s='type' --icons"
 alias ll="x"
 alias xa="x -a"
 alias l="xa"
@@ -88,13 +91,11 @@ alias viconf="nvimconfig"
 alias vconf="nvimconfig"
 alias vconfig="nvimconfig"
 
-#
 # Note taking
 mknote() {
     echo "# TITLE: $1\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" >> ./"$(date +"%y%m%d%H%M")--$1".md
     nvim ./"$(date +"%y%m%d%H%M")--$1".md
 }
-
 
 # Push todo strings to todoFile (it was a very good source of shell scripting learning for me)
 todo() {
@@ -110,7 +111,6 @@ todo() {
         # Takes the flag argument out of the arg array
         shift $((OPTIND - 1))
     done
-
     # If todoFile doesn't exists, create it
     if [[ ! -f "$todoFile" ]]; then
         echo "${yellow}No file $todoFile currently exists. Touching todoFile.${nc}"
@@ -120,7 +120,6 @@ todo() {
     if [[ -s "$todoFile" ]]; then
         echo "" >> "$todoFile"
     fi
-
     # MAIN LOOP
     for arg in "$@"; do
         if echo "- [ ] $arg" >> "$todoFile"; then
@@ -129,7 +128,6 @@ todo() {
             echo "todo: ${red}Error when trying to 'echo $arg' to $todoFile.${nc}"
         fi
     done
-
     # Total incomplete todos
     local todoCount=$(grep -c -v '^[[:space:]#]*$' "$todoFile")
     # Echo staturs
@@ -145,14 +143,12 @@ todo() {
     fi
 }
 
-
 potp() {
     [[ $# -ne 1 ]] && {
         echo "potp: ${red}Please provide (only) one argument${nc}" && return 1
     }
     pass otp "$1"
 }
-
 
 # TODO: Check if this still is necessary or if just the alias is enough
 # Exporting and sourcing added to $ZSH_CUSTOM/exports.zsh file
