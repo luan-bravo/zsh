@@ -20,6 +20,27 @@ alias huebr="setxkbmap br"
 alias merica="setxkbmap us"
 alias inter="setxkbmap -layout us -variant intl"
 
+
+echocol() {
+    #TODO: accept multiple strings
+    if [[ $# -ne 2 ]]; then
+        echo "${blue}Usage: echocol <color> <string>\n       add '{COLOR}' to the string if you wish to scape back to the given color${nc}"
+        return -1
+    fi
+    if [[ -n $1 ]] || (( $colors[(Ie)$1] )); then
+        if [[ -z $clr ]]; then
+            local clr="$1"
+        fi
+    else
+        echo "${red}please insert a valid color from array \$colors${nc}"
+        return 1
+    fi
+    # last color
+    local text="${2/\{COLOR\}/${clr}}"
+    echo "${clr}${text}${nc}"
+}
+alias ec="echocol"
+
 del() {
     mv "$*" "$HOME/.trash"
 }
