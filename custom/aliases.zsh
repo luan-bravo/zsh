@@ -9,6 +9,7 @@ alias v="nvim"
 alias il="i3lock"
 alias py="python"
 alias ino="arduino-cli"
+alias rg="rg -S"
 # Fix overscan (when using old HDMI TV as monitor)
 alias osfix="xrandr --output HDMI-A-0 --set underscan on & xrandr --output HDMI-A-0 --set 'underscan hborder' 80 --set 'underscan vborder' 40"
 # IWD Wi-Fi manager aliases
