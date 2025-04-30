@@ -94,6 +94,7 @@ gclgh() {
 
 # eza aliases (formerly for exa) - ls made with rust and a much nicer
 alias x="eza -lhn -s='type' --icons"
+alias xd="x -D"
 alias ll="x"
 alias xa="x -a"
 alias l="xa"
