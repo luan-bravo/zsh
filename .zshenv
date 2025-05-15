@@ -17,7 +17,7 @@ export RUSTC_WRAPPER="$(which sccache)"
 # Personal paths and variables
 export GH="https://github.com/"
 export NOTES="$HOME/notes"
-export TODOFILE="$NOTES/todo.md"
+export TODOFILE="$NOTES/todos/todo.md"
 
 
 # Colors
