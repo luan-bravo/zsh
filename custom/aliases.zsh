@@ -121,9 +121,15 @@ alias vconfig="nvimconfig"
 
 # Note taking
 mknote() {
-    echo "# TITLE: $1\n\n# DATE: $(date +"%y/%m/%d")\n\n# TIME: $(date +"%H:%M")\n" \
-        >> ./"$(date +"%y%m%d%H%M")--$1".md
-    nvim ./"$(date +"%y%m%d%H%M")--$1".md
+    [[ $# -gt 1 ]] && ec "${red}" "[mknote]: Too many arguments. Provide just a note name or no arguments."
+    local date="$(date +%y%m%d)"
+    local time="$(date %H%M)"
+    local -a fileName="${date}${time}"
+    [[ -n "$1" ]] && fileName+="--$1"
+    fileName+=".md"
+    echo "# TITLE: $1\n# DATE: ${date}\n# TIME: ${time}\n\n" \
+        >> "./${fileName}"
+    nvim "./${fileName}"
 }
 
 # Push todo strings to todoFile (it was a very good source of shell scripting learning for me)
