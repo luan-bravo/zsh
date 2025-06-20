@@ -117,9 +117,9 @@ function +vi-git-st() {
     local -a staged=($(echo "$stat" | grep '^[AM]' | wc -l))
     ahead=${ahead_and_behind[1]}
     behind=${ahead_and_behind[2]}
-    (( $modified )) && gitstatus+=( "%{\033[1m%}${modified}\uf044" )
-    (( $staged )) && gitstatus+=( "%{\033[1m%}${staged}\uf046" )
-    (( $untracked )) && gitstatus+=( "%{\033[1m%}${untracked}\ueb32" )
+    (( $modified )) && gitstatus+=( "%{\033[30m%}${modified}\uf044" )
+    (( $staged )) && gitstatus+=( "%{\033[30m%}${staged}\uf046" )
+    (( $untracked )) && gitstatus+=( "%{\033[30m%}${untracked}\ueb32" )
     (( $ahead )) && gitstatus+=( '' )
     (( $behind )) && gitstatus+=( '' )
     [[ -n "$gitstatus" ]] && hook_com[misc]+=' '
