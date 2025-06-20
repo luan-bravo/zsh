@@ -118,6 +118,9 @@ alias nvconf="nvimconfig"
 alias nvconfig="nvimconfig"
 alias vconf="nvimconfig"
 alias vconfig="nvimconfig"
+alias hyprconfig="editproj $DOTDIR/hypr"
+alias hconfig="editproj $DOTDIR/hypr"
+alias hconf="editproj $DOTDIR/hypr"
 
 # Note taking
 mknote() {
