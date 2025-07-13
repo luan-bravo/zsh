@@ -3,19 +3,28 @@ alias c="clear" # Clean your room
 alias q="exit"
 alias stdn="shutdown now"
 alias f="fg"
+
+
 alias xzsh="exec zsh"
 alias nv="nvim"
 alias v="nvim"
 alias il="i3lock"
 alias py="python"
 alias ino="arduino-cli"
+
+# Options added
 alias rg="rg -S"
+alias bat="bat --theme gruvbox-dark"
+
+#
 # Fix overscan (when using old HDMI TV as monitor)
 alias osfix="xrandr --output HDMI-A-0 --set underscan on & xrandr --output HDMI-A-0 --set 'underscan hborder' 80 --set 'underscan vborder' 40"
+#
 # IWD Wi-Fi manager aliases
 alias iwpower="rfkill unblock all && iwctl device wlan0 set-property Powered on"
 alias iwshow="iwctl station wlan0 show"
 alias iwscan="iwctl station wlan0 get-networks"
+#
 # Keyboard layouts
 alias huebr="setxkbmap br"
 alias merica="setxkbmap us"
@@ -69,7 +78,6 @@ del() {
 }
 
 # Git
-alias gaa="git add -A"
 alias gap="git add -p"
 alias gs="git status --short"
 alias gsv="git status"
@@ -81,6 +89,14 @@ alias gcam="git commit -am"
 alias gp="git push"
 alias gcl="git clone --recurse-submodules"
 alias gsubup="git submodule sync && git submodule update --remote"
+unalias gaa
+gaa() {
+    if [[ $# -ne 0 ]]; then
+        git add $*
+    else
+        git add $(pwd)
+    fi
+}
 gsync() {
     gap && gc && gp
 }
@@ -121,6 +137,9 @@ alias vconfig="nvimconfig"
 alias hyprconfig="editproj $DOTDIR/hypr"
 alias hconfig="editproj $DOTDIR/hypr"
 alias hconf="editproj $DOTDIR/hypr"
+alias bconf="editproj $DOTDIR/waybar"
+alias barconf="editproj $DOTDIR/waybar"
+alias barconfig="editproj $DOTDIR/waybar"
 
 # Note taking
 mknote() {
