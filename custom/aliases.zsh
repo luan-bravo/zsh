@@ -4,13 +4,13 @@ alias q="exit"
 alias stdn="shutdown now"
 alias f="fg"
 
-
 alias xzsh="exec zsh"
-alias nv="nvim"
+alias nv="nvim ."
 alias v="nvim"
 alias il="i3lock"
 alias py="python"
 alias ino="arduino-cli"
+alias ai="gemini"
 
 # Options added
 alias rg="rg -S"
@@ -62,44 +62,87 @@ del() {
             # TODO: create/rename to another file/dir if there is already a file with the same name in .trash
             mv "$1" "$2" || {
                 ec ${red} "Failed to move ${green}$1{COLOR} into ${green}$2{COLOR}."
-                return 1
-            }
-        }
-        throwaway $* $trash
-    else
-        ec ${red} "Directory ${green}${trash}{COLOR} does not exist."
-        ec ${yellow} "Creating ${green}${trash}{COLOR}..."
-        md $trash || {
-            ec ${red} "Failed to create ${green}${trash}{COLOR}."
-            return 1
-        }
-        throwaway $* $trash
+                            return 1
+                        }
+                }
+            throwaway $* $trash
+        else
+            ec ${red} "Directory ${green}${trash}{COLOR} does not exist."
+            ec ${yellow} "Creating ${green}${trash}{COLOR}..."
+            md $trash || {
+                ec ${red} "Failed to create ${green}${trash}{COLOR}."
+                            return 1
+                        }
+                    throwaway $* $trash
     fi
 }
 
 # Git
 alias gap="git add -p"
+
 alias gs="git status --short"
 alias gsv="git status"
 alias gsvv="git status --verbose"
+
 alias gc="git commit --verbose"
 alias gcs="git commit"
 alias gcm="git commit -m"
 alias gcam="git commit -am"
+
 alias gp="git push"
+
 alias gcl="git clone --recurse-submodules"
+
 alias gsubup="git submodule sync && git submodule update --remote"
+
+
+dohere() {
+    if [[ "$#" -eq 0 ]]; then
+        echo "[dohere] USAGE: dohere <command> [args]"
+        echo "[dohere] if no arguments are provided, the command is ran as \`<command> \$(pwd)\`"
+        return
+    fi
+
+    local cmd="$@"
+    for arg in $cmd; do
+        if [[ -e "${arg}" ]]; then
+            echo "[dohere] found valid path '${arg}' in args"
+            "$@"
+            return
+        fi
+    done
+
+    if [[ "$1" = "git" ]]; then
+        set -- "$@" "$(git rev-parse --show-toplevel || echo '.')"
+        $@ $(git rev-parse --show-toplevel)
+        return
+
+    else
+        set -- "$@" "."
+        return
+    fi
+    echo "[dohere] cmd: '${cmd}'"
+}
+
+
+unalias gr
+alias gr="dohere git restore"
+
+unalias grst
+alias grst="dohere git restore --staged"
+
+unalias gr
+alias grs="dohere git restore --staged"
+
 unalias gaa
 gaa() {
-    if [[ $# -ne 0 ]]; then
-        git add $*
-    else
-        git add $(pwd)
-    fi
-}
+    { [[ "$#" -ne 0 ]] && git add "$@" } || git add $(pwd)
+    }
+
 gsync() {
     gap && gc && gp
 }
+
 gclgh() {
     if [[ "$1" == *"/"* ]]; then
         gcl "https://github.com/$1"
@@ -107,6 +150,7 @@ gclgh() {
         gcl "https://github.com/luan-bravo/$1"
     fi
 }
+
 
 # eza aliases (formerly for exa) - ls made with rust and a much nicer
 alias x="eza -lhn -s='type' --icons"
@@ -128,6 +172,7 @@ editproj() {
 alias zshconfig="editproj $ZDOTDIR"
 alias zconfig="zshconfig"
 alias zconf="zconfig"
+
 alias nvimconfig="editproj $DOTDIR/nvim"
 alias nvimconf="nvimconfig"
 alias nvconf="nvimconfig"
@@ -137,16 +182,23 @@ alias vconfig="nvimconfig"
 alias hyprconfig="editproj $DOTDIR/hypr"
 alias hconfig="editproj $DOTDIR/hypr"
 alias hconf="editproj $DOTDIR/hypr"
-alias bconf="editproj $DOTDIR/waybar"
-alias barconf="editproj $DOTDIR/waybar"
+
 alias barconfig="editproj $DOTDIR/waybar"
+alias barconf="editproj $DOTDIR/waybar"
+alias wbconf="editproj $DOTDIR/waybar"
+alias bconf="editproj $DOTDIR/waybar"
+
+alias wezconfig="editproj $DOTDIR/wezterm"
+alias termconfig="wezconfig"
+alias wezconf="termconfig"
+alias tconf="termconfig"
 
 # Note taking
 mknote() {
     [[ $# -gt 1 ]] && ec "${red}" "[mknote]: Too many arguments. Provide just a note name or no arguments."
     local date="$(date +%y%m%d)"
-    local time="$(date %H%M)"
-    local -a fileName="${date}${time}"
+    local time="$(date +%H%M)"
+    local fileName="${date}${time}"
     [[ -n "$1" ]] && fileName+="--$1"
     fileName+=".md"
     echo "# TITLE: $1\n# DATE: ${date}\n# TIME: ${time}\n\n" \
@@ -162,7 +214,7 @@ todo() {
         case $opt in
             f)
                 todoFile="$OPTARG"
-            ;;
+                ;;
             \?) echo "Invalid option: -$OPTARG" ;;
         esac
         # Takes the flag argument out of the arg array
@@ -204,7 +256,7 @@ potp() {
     [[ $# -ne 1 ]] && {
         ec ${red} "potp: Please provide (only) one argument" && return 1
     }
-    pass otp "$1"
+pass otp "$1"
 }
 
 # TODO: Check if this still is necessary or if just the alias is enough
