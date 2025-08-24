@@ -1,8 +1,12 @@
 # Exports
 
+# Source
 src() { [[ -f "$1" ]] && source "$1" }
+# Export
 xpt() { [[ -d "$2" ]] && export "$1"="$2" }
+# nvr??? what was I thinking?
 nvr() { [[ -d "$1" ]] && export PATH="$PATH:$1" }
+
 
 src "$HOME/.bun/_bun"
 
@@ -33,9 +37,8 @@ xpt PNPM_HOME "$HOME/.local/share/pnpm"
 nvr "$PNPM_HOME" 
 nvr "$ZDOTDIR/custom/bin"
 
-nvr "$HOME/.cargo/bin/"
+nvr "$HOME/.cargo/bin"
+nvr "$HOME/.local/share/nvim/mason/bin"
+nvr "$HOME/.local/bin"
+nvr "PATH=/home/lul/.opencode/bin:$PATH"
 
-# WSL browser, requires wslu installation to be followerd
-if [[ -n $WSL_DISTRO_NAME ]]; then
-    xpt BROWSER "wslview"
-fi
