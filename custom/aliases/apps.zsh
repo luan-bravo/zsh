@@ -9,3 +9,4 @@ alias ai="gemini"
 # options added
 alias rg="rg -s"
 alias bat="bat --theme gruvbox-dark"
+alias idf="idf.py"
