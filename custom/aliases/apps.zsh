@@ -1,0 +1,11 @@
+# Apps
+alias nv="nvim ."
+alias v="nvim"
+alias il="i3lock"
+alias py="python"
+alias ino="arduino-cli"
+alias ai="gemini"
+
+# options added
+alias rg="rg -s"
+alias bat="bat --theme gruvbox-dark"

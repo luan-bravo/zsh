@@ -1,101 +1,3 @@
-# System and shell
-alias c="clear" # Clean your room
-alias q="exit"
-alias stdn="shutdown now"
-alias f="fg"
-
-alias xzsh="exec zsh"
-alias nv="nvim ."
-alias v="nvim"
-alias il="i3lock"
-alias py="python"
-alias ino="arduino-cli"
-alias ai="gemini"
-
-# Options added
-alias rg="rg -S"
-alias bat="bat --theme gruvbox-dark"
-
-#
-# Fix overscan (when using old HDMI TV as monitor)
-alias osfix="xrandr --output HDMI-A-0 --set underscan on & xrandr --output HDMI-A-0 --set 'underscan hborder' 80 --set 'underscan vborder' 40"
-#
-# IWD Wi-Fi manager aliases
-alias iwpower="rfkill unblock all && iwctl device wlan0 set-property Powered on"
-alias iwshow="iwctl station wlan0 show"
-alias iwscan="iwctl station wlan0 get-networks"
-#
-# Keyboard layouts
-alias huebr="setxkbmap br"
-alias merica="setxkbmap us"
-alias inter="setxkbmap -layout us -variant intl"
-
-
-echocol() {
-    #TODO: accept multiple strings
-    if [[ $# -ne 2 ]]; then
-        echo "${blue}Usage: echocol <color> <string>\n       add '{COLOR}' to the string if you wish to scape back to the given color${nc}"
-        return -1
-    fi
-    if [[ -n $1 ]] || (( $colors[(Ie)$1] )); then
-        if [[ -z $clr ]]; then
-            local clr="$1"
-        fi
-    else
-        echo "${red}please insert a valid color from array \$colors${nc}"
-        return 1
-    fi
-    # last color
-    local text="${2/\{COLOR\}/${clr}}"
-    echo "${clr}${text}${nc}"
-}
-alias ec="echocol"
-
-del() {
-    if [[ -n $TRASH ]]; then
-        $trash=$TRASH
-    else
-        export trash="$HOME/.trash"
-    fi
-    if [[ -d "$trash" ]]; then
-        throwaway() {
-            # TODO: create/rename to another file/dir if there is already a file with the same name in .trash
-            mv "$1" "$2" || {
-                ec ${red} "Failed to move ${green}$1{COLOR} into ${green}$2{COLOR}."
-                            return 1
-                        }
-                }
-            throwaway $* $trash
-        else
-            ec ${red} "Directory ${green}${trash}{COLOR} does not exist."
-            ec ${yellow} "Creating ${green}${trash}{COLOR}..."
-            md $trash || {
-                ec ${red} "Failed to create ${green}${trash}{COLOR}."
-                            return 1
-                        }
-                    throwaway $* $trash
-    fi
-}
-
-# Git
-alias gap="git add -p"
-
-alias gs="git status --short"
-alias gsv="git status"
-alias gsvv="git status --verbose"
-
-alias gc="git commit --verbose"
-alias gcs="git commit"
-alias gcm="git commit -m"
-alias gcam="git commit -am"
-
-alias gp="git push"
-
-alias gcl="git clone --recurse-submodules"
-
-alias gsubup="git submodule sync && git submodule update --remote"
-
-
 dohere() {
     if [[ "$#" -eq 0 ]]; then
         echo "[dohere] USAGE: dohere <command> [args]"
@@ -125,75 +27,53 @@ dohere() {
 }
 
 
-unalias gr
-alias gr="dohere git restore"
-
-unalias grst
-alias grst="dohere git restore --staged"
-
-unalias gr
-alias grs="dohere git restore --staged"
-
-unalias gaa
-gaa() {
-    { [[ "$#" -ne 0 ]] && git add "$@" } || git add $(pwd)
-    }
-
-gsync() {
-    gap && gc && gp
-}
-
-gclgh() {
-    if [[ "$1" == *"/"* ]]; then
-        gcl "https://github.com/$1"
+echocol() {
+    #TODO: accept multiple strings
+    if [[ $# -ne 2 ]]; then
+        echo "${blue}Usage: echocol <color> <string>\n       add '{COLOR}' to the string if you wish to scape back to the given color${nc}"
+        return -1
+    fi
+    if [[ -n $1 ]] || (( $colors[(Ie)$1] )); then
+        if [[ -z $clr ]]; then
+            local clr="$1"
+        fi
     else
-        gcl "https://github.com/luan-bravo/$1"
+        echo "${red}please insert a valid color from array \$colors${nc}"
+        return 1
     fi
+    # last color
+    local text="${2/\{COLOR\}/${clr}}"
+    echo "${clr}${text}${nc}"
 }
 
 
-# eza aliases (formerly for exa) - ls made with rust and a much nicer
-alias x="eza -lhn -s='type' --icons"
-alias xd="x -D"
-alias ll="x"
-alias xa="x -a"
-alias l="xa"
-alias xt="x -T"
-alias xta="xa -T"
-alias xtd="xa -TD"
-
-# Easy access to frequently modified config files
-editproj() {
-    if [[ $# -ne 1 ]] || [[ ! -d $1 ]]; then
-        ec ${yellow} "usage: editproj ${green}</path/to/project>{COLOR}" && return 1
+del() {
+    if [[ -n $TRASH ]]; then
+        $trash=$TRASH
+    else
+        export trash="$HOME/.trash"
     fi
-    nvim -c "cd $1" $1
+    if [[ -d "$trash" ]]; then
+        throwaway() {
+            # TODO: create/rename to another file/dir if there is already a file with the same name in .trash
+            mv "$1" "$2" || {
+                ec ${red} "Failed to move ${green}$1{COLOR} into ${green}$2{COLOR}."
+                            return 1
+                        }
+                }
+            throwaway $* $trash
+        else
+            ec ${red} "Directory ${green}${trash}{COLOR} does not exist."
+            ec ${yellow} "Creating ${green}${trash}{COLOR}..."
+            md $trash || {
+                ec ${red} "Failed to create ${green}${trash}{COLOR}."
+                            return 1
+                        }
+                    throwaway $* $trash
+    fi
 }
-alias zshconfig="editproj $ZDOTDIR"
-alias zconfig="zshconfig"
-alias zconf="zconfig"
 
-alias nvimconfig="editproj $DOTDIR/nvim"
-alias nvimconf="nvimconfig"
-alias nvconf="nvimconfig"
-alias nvconfig="nvimconfig"
-alias vconf="nvimconfig"
-alias vconfig="nvimconfig"
-alias hyprconfig="editproj $DOTDIR/hypr"
-alias hconfig="editproj $DOTDIR/hypr"
-alias hconf="editproj $DOTDIR/hypr"
-
-alias barconfig="editproj $DOTDIR/waybar"
-alias barconf="editproj $DOTDIR/waybar"
-alias wbconf="editproj $DOTDIR/waybar"
-alias bconf="editproj $DOTDIR/waybar"
-
-alias wezconfig="editproj $DOTDIR/wezterm"
-alias termconfig="wezconfig"
-alias wezconf="termconfig"
-alias tconf="termconfig"
-
-# Note taking
+# note taking
 mknote() {
     [[ $# -gt 1 ]] && ec "${red}" "[mknote]: Too many arguments. Provide just a note name or no arguments."
     local date="$(date +%y%m%d)"
@@ -252,12 +132,6 @@ todo() {
     fi
 }
 
-potp() {
-    [[ $# -ne 1 ]] && {
-        ec ${red} "potp: Please provide (only) one argument" && return 1
-    }
-pass otp "$1"
-}
 
 # TODO: Check if this still is necessary or if just the alias is enough
 # Exporting and sourcing added to $ZSH_CUSTOM/exports.zsh file
@@ -267,7 +141,7 @@ idf() {
     if [ ! -x "$(command -v idf.py)" ]; then
         echo "no idf.py"
         if [ -z "$IDF_PATH" ] && [ -d "/opt/esp-idf" ]; then
-            echo "no idf_path"
+            echo "no IDF_PATH"
             export IDF_PATH="/opt/esp-idf"
             source "$IDF_PATH/export.sh"
         else
