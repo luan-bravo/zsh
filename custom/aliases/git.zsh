@@ -9,6 +9,7 @@ alias gc="git commit --verbose"
 alias gcs="git commit"
 alias gcm="git commit -m"
 alias gcam="git commit -am"
+alias gcamd="git commit --amend"
 
 alias gp="git push"
 
