@@ -1,5 +1,13 @@
 # git
 alias gap="git add -p"
+unalias gaa
+gaa() {
+    if [[ "$#" -ne 0 ]]; then
+        git add "$@"
+    else
+        dohere git add
+    fi
+}
 
 alias gs="git status --short"
 alias gsv="git status"
@@ -18,21 +26,11 @@ alias gcl="git clone --recurse-submodules"
 alias gsubup="git submodule sync && git submodule update --remote"
 
 
-
-
-unalias gr
-alias gr="dohere git restore"
-
 unalias grst
 alias grst="dohere git restore --staged"
+unalias grs
+alias grs="dohere git restore"
 
-unalias gr
-alias grs="dohere git restore --staged"
-
-unalias gaa
-gaa() {
-    { [[ "$#" -ne 0 ]] && git add "$@" } || git add $(pwd)
-    }
 
 gsync() {
     gap && gc && gp
