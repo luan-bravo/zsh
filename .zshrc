@@ -45,3 +45,14 @@ else
         echo "${red}Could not create '.zshenv' symlink in home directory.${nc}"
     fi
 fi
+
+
+local dirs=("$ZSH_CUSTOM/aliases/")
+
+for dir in $dirs; do
+    # echo $dir
+    for file in $dir/*; do;
+        # echo $file
+        source $file
+    done
+done
