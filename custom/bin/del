@@ -1,0 +1,32 @@
+#! /usr/bin/env zsh
+
+if [[ -z $TRASH ]]; then
+    echo "[del] No variable 'TRASH' found, exporting 'TRASH=\"\$HOME/.trash\"'"
+    export TRASH="$HOME/.trash"
+fi
+if [[ ! -d $TRASH]]; then
+    # TODO: make `echolog`, `echowarn` and `echoerr` (aliases: el, ew, er)
+    ec "[${red}del${nc}] ${red}ERROR:${nc} dir \$TRASH was not found."
+    ec "[${yellow}del${nc}] makind dir ${TRASH}"
+    md -p $TRASH
+fi
+trash=$TRASH
+
+if [[ -d "$trash" ]]; then
+    throwaway() {
+        # TODO: create/rename to another file/dir if there is already a file with the same name in .trash
+        mv "$1" "$2" || {
+            ec ${red} "Failed to move ${green}$1{COLOR} into ${green}$2{color}."
+                        return 1
+                    }
+            }
+        throwaway $* $trash
+    else
+        ec ${red} "Directory ${green}${trash}{COLOR} does not exist."
+        ec ${yellow} "Creating ${green}${trash}{COLOR}..."
+        md $trash || {
+            ec ${red} "Failed to create ${green}${trash}{COLOR}."
+                        return 1
+                    }
+                throwaway $* $trash
+fi
