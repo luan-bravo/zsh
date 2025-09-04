@@ -14,8 +14,11 @@ local fileName="${date}${time}"
 
 fileName+=".md"
 
-# TODO: Treat title chars: 
-# Allow only alphanumeric chars and capitalize initials
-echo "# $1\n" >> "./${fileName}"
-# echo "# Date: ${date} -- ${time}\n\n" >> "./${fileName}"
+
+# Capitalize initials && Swap non-alphanumeric chars for spaces
+local title=$(sed 's/[^[:alnum:]]/ /g' <<< "$1" | sed -E 's/\b(.)/\u\1/g')
+echo "# ${title}\n" >> "./${fileName}"
+# echo "# Created : ${date} -- ${time}\n\n" >> "./${fileName}"
+
+
 nvim "./${fileName}"
