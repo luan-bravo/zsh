@@ -16,5 +16,3 @@ fi
 # last color
 local text="${2/\{COLOR\}/${clr}}"
 echo "${clr}${text}${nc}"
-
-alias ec="echocol"
