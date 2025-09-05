@@ -16,11 +16,12 @@ done
 
 if [[ "$1" = "git" ]]; then
     set -- "$@" "$(git rev-parse --show-toplevel || echo '.')"
-    $@ $(git rev-parse --show-toplevel)
-    return
+    "$@ $(git rev-parse --show-toplevel)
+"    return
 
 else
     set -- "$@" "."
+    "$@" "."
     return
 fi
 echo "[dohere] cmd: '${cmd}'"
