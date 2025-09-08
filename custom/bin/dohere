@@ -1,24 +1,27 @@
 #!/usr/bin/env zsh
+# Execute command at '.', the PWD, or at the provided path more easily. Good for aliases
 if [[ "$#" -eq 0 ]]; then
     echo "[dohere] USAGE: dohere <command> [args]"
-    echo "[dohere] if no arguments are provided, the command is ran as \`<command> \$(pwd)\`"
+    echo ""
+    echo "[dohere] If no arguments are provided, the command is ran as '<command> \$(pwd)'"
     return
 fi
 
+# Check for path
 local cmd="$@"
 for arg in $cmd; do
     if [[ -e "${arg}" ]]; then
-        echo "[dohere] found valid path '${arg}' in args"
+        echo "[dohere] Found valid path '${arg}' in args. Running normally"
         "$@"
         return
     fi
 done
 
+# Special Case: If git, use git repo root
 if [[ "$1" = "git" ]]; then
     set -- "$@" "$(git rev-parse --show-toplevel || echo '.')"
-    "$@ $(git rev-parse --show-toplevel)
-"    return
-
+    "$@" "$(git rev-parse --show-toplevel)"
+    return
 else
     set -- "$@" "."
     "$@" "."
