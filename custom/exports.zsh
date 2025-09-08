@@ -1,5 +1,4 @@
 # Exports
-
 # Source
 src() { [[ -f "$1" ]] && source "$1" }
 # Export
@@ -40,5 +39,5 @@ nvr "$ZDOTDIR/custom/bin"
 nvr "$HOME/.cargo/bin"
 nvr "$HOME/.local/share/nvim/mason/bin"
 nvr "$HOME/.local/bin"
-nvr "PATH=/home/lul/.opencode/bin:$PATH"
+nvr "$HOME/.opencode/bin"
 
