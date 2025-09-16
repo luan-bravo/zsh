@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+# similar to my other script 'dohere', but as a nvim command. 
+
+local cmd="nvim"
+local args="$@"
+local haspath=false
+for arg in $cmd; do
+    if [[ -e "${arg}" ]]; then
+	    haspath=true
+	    break
+    fi
+done
+
+if [[ $haspath = false ]]; then
+	cmd+=" -c 'cd $(pwd)'"
+	echo "[$0] ${cmd}"
+	$cmd
+else
+	echo "[$0] Found valid path '${arg}' in args. Running normally"
+	"${cmd}"
+	echo "[$0] ${cmd}"
+	return
+fi

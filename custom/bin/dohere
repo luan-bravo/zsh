@@ -1,30 +1,38 @@
 #!/usr/bin/env zsh
 # Execute command at '.', the PWD, or at the provided path more easily. Good for aliases
+
+setopt localoptions shwordsplit
+
 if [[ "$#" -eq 0 ]]; then
-    echo "[dohere] USAGE: dohere <command> [args]"
-    echo ""
-    echo "[dohere] If no arguments are provided, the command is ran as '<command> \$(pwd)'"
-    return
+	echo "[dohere] USAGE: dohere <command> [args]"
+	echo
+	echo "[dohere] If no arguments are provided, the command is ran as '<command> \$(pwd)'"
+	return
 fi
 
 # Check for path
 local cmd="$@"
 for arg in $cmd; do
-    if [[ -e "${arg}" ]]; then
-        echo "[dohere] Found valid path '${arg}' in args. Running normally"
-        "$@"
-        return
-    fi
+	if [[ -e "${arg}" ]]; then
+		echo "[dohere] $cmd"
+		$cmd
+		return
+	fi
 done
 
-# Special Case: If git, use git repo root
-if [[ "$1" = "git" ]]; then
-    set -- "$@" "$(git rev-parse --show-toplevel || echo '.')"
-    "$@" "$(git rev-parse --show-toplevel)"
-    return
+# if alias, expand
+
+if [[ "$#" -eq 1 ]]; then
+	# Special Case: If git, use git repo root
+	if [[ "$1" = "git" ]]; then
+		cmd+="$(git rev-parse --show-toplevel)"
+	# Run here
+	else
+		cmd+=" ."
+	fi
+	$cmd
 else
-    set -- "$@" "."
-    "$@" "."
-    return
 fi
-echo "[dohere] cmd: '${cmd}'"
+
+
+echo "[dohere] '${cmd}'"
