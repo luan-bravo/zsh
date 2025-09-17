@@ -1,30 +1,46 @@
 #!/usr/bin/env zsh
 # Execute command at '.', the PWD, or at the provided path more easily. Good for aliases
-if [[ "$#" -eq 0 ]]; then
-    echo "[dohere] USAGE: dohere <command> [args]"
-    echo ""
-    echo "[dohere] If no arguments are provided, the command is ran as '<command> \$(pwd)'"
-    return
+
+setopt localoptions shwordsplit
+
+local argc=$#
+local cmd=$1
+shift
+argv=$@
+
+if [[ $argc -eq 0 ]] && [[ ! -x $cmd ]]; then
+	echo "[dohere] execute <command> in the PWD"
+	echo "[dohere] USAGE: dohere <command> [args...]"
+	echo
+	echo "[dohere] If no arguments are provided, the command is ran as '<command> \$(pwd)'"
+	echo "[dohere] *If the command is \"git\" it gets automatically executed at the current repo's top level"
+	echo "[dohere] **Do NOT use dohere with aliases as the command"
+	return 1
 fi
+
+echo "[dohere] '$cmd'"
+echo "[dohere] '$argv'"
 
 # Check for path
-local cmd="$@"
-for arg in $cmd; do
-    if [[ -e "${arg}" ]]; then
-        echo "[dohere] Found valid path '${arg}' in args. Running normally"
-        "$@"
-        return
-    fi
-done
 
-# Special Case: If git, use git repo root
-if [[ "$1" = "git" ]]; then
-    set -- "$@" "$(git rev-parse --show-toplevel || echo '.')"
-    "$@" "$(git rev-parse --show-toplevel)"
-    return
+if [[ "$argc" -eq 1 ]]; then
+	# Special Case: If git, use git repo root
+	if [[ "$1" = "git" ]]; then
+		$cmd $(git rev-parse --show-toplevel)
+		return
+	else
+		$cmd "."
+		return
+	fi
 else
-    set -- "$@" "."
-    "$@" "."
-    return
+	for arg in $argv; do
+		echo "[dohere] for arg: '$arg'"
+		if [[ -e "$arg" ]]; then
+			echo "[dohere] found path '$arg'"
+			$cmd $argv
+			return
+		fi
+	done
+	$cmd $argv
+	return
 fi
-echo "[dohere] cmd: '${cmd}'"
