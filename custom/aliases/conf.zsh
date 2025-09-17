@@ -8,7 +8,7 @@ editproj() {
 
 alias zconf="editproj $ZDOTDIR"
 
-alias vconf="editproj $DOTDIR/nvim"
+alias vconf="editproj $DOTDIR/nvim/lua/lul"
 
 alias hconf="editproj $DOTDIR/hypr"
 
