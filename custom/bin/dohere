@@ -1,46 +1,66 @@
 #!/usr/bin/env zsh
 # Execute command at '.', the PWD, or at the provided path more easily. Good for aliases
+setopt localoptions shwordsplit # For splitting argv
 
-setopt localoptions shwordsplit
+dhlog() {
+    if [[ $DOHERE_LOG = true ]]; then
+        echo "[dohere] $@"
+    fi
+}
+DOHERE_LOG=false
 
-local argc=$#
-local cmd=$1
-shift
-argv=$@
 
-if [[ $argc -eq 0 ]] && [[ ! -x $cmd ]]; then
-	echo "[dohere] execute <command> in the PWD"
-	echo "[dohere] USAGE: dohere <command> [args...]"
-	echo
-	echo "[dohere] If no arguments are provided, the command is ran as '<command> \$(pwd)'"
-	echo "[dohere] *If the command is \"git\" it gets automatically executed at the current repo's top level"
-	echo "[dohere] **Do NOT use dohere with aliases as the command"
-	return 1
+if [[ $# -eq 0 ]] || [[ -z "$(whence $1)" ]]; then
+    if [[ $# -eq 0 ]]; then
+        echo "[dohere] error: No arguments passed"
+    elif [[ -z "$(whence $1)" ]]; then
+        echo "[dohere] error: '$1' is not a valid command"
+    fi
+    echo  "DOHERE: Execute a <command> in the specified directory or at the PWD ('.')"
+    echo
+    echo  "USAGE: $0 <command> [args...]"
+    echo
+    echo  "If no arguments are provided, the command is ran as '<command> \$(pwd)'"
+    echo  "\t*If the command is \"git\" it gets automatically executed at the current repo's top level"
+    echo  "\t**Do NOT use dohere with aliases as the command"
+    return 1
 fi
 
-echo "[dohere] '$cmd'"
-echo "[dohere] '$argv'"
+cmd=$1
+shift
+argv=$@
+argc=$#
+haspath=false
 
-# Check for path
+dhlog "'$cmd'"
+dhlog "'$argv'"
 
-if [[ "$argc" -eq 1 ]]; then
-	# Special Case: If git, use git repo root
-	if [[ "$1" = "git" ]]; then
-		$cmd $(git rev-parse --show-toplevel)
-		return
-	else
-		$cmd "."
-		return
-	fi
+if [[ "$argc" -eq 0 ]]; then
+    # Special Case: If git, use git repo root
+    if [[ "$1" = "git" ]]; then
+        $cmd $argv $(git rev-parse --show-toplevel)
+        return
+    else
+        $cmd "."
+        return
+    fi
 else
-	for arg in $argv; do
-		echo "[dohere] for arg: '$arg'"
-		if [[ -e "$arg" ]]; then
-			echo "[dohere] found path '$arg'"
-			$cmd $argv
-			return
-		fi
-	done
-	$cmd $argv
-	return
+    # Check for path
+    for arg in $argv; do
+        dhlog "\tfor arg: '$arg'"
+        if [[ $arg = "--dohere" || $arg = "--doherelog" ]]; then
+            DOHERE_LOG=true
+        elif [[ -e "$arg" ]]; then
+            dhlog "\tfound path '$arg'"
+            haspath=true
+        fi
+        [[ $DOHERE_LOG = true && $haspath = true ]] && break
+    done
+    if [[ $haspath = true ]]; then
+        $cmd $argv
+        return
+    else
+        $cmd $argv "."
+        return
+    fi
 fi
