@@ -6,6 +6,7 @@ xpt() { [[ -d "$2" ]] && export "$1"="$2" }
 # nvr??? what was I thinking?
 nvr() { [[ -d "$1" ]] && export PATH="$PATH:$1" }
 
+nvr "$ZDOTDIR/bin"
 
 src "$HOME/.bun/_bun"
 
@@ -34,7 +35,6 @@ nvr "$HOME/.turso"
 
 xpt PNPM_HOME "$HOME/.local/share/pnpm"
 nvr "$PNPM_HOME" 
-nvr "$ZDOTDIR/custom/bin"
 
 nvr "$HOME/.cargo/bin"
 nvr "$HOME/.local/share/nvim/mason/bin"

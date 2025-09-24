@@ -1,18 +1,27 @@
-# User
-export DOTDIR="$HOME/.config"
-
 # ZSH
-export ZDOTDIR="$DOTDIR/zsh"
+export ZDOTDIR="$HOME/.config/zsh"
+export ZSH="/usr/share/oh-my-zsh/"
 export ZSH_CUSTOM="$ZDOTDIR/custom"
-export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_THEME="gruvbox"
 export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE="10000"
 
+# Instalation path of oh-my-zsh
+export ROOT_PLUGINS="/usr/share/zsh/plugins"
+
+## ohmyzsh flags
+export DISABLE_AUTO_UPDATE=true # Update though paru
+export DISABLE_UPDATE_PROMPT=true # No need, gonna read release notes already
+### Shell Experience
+export ENABLE_CORRECTION=true
+export CASE_SENSITIVE=false
+export HYPHEN_INSENSITIVE=true
+
 
 # Other apps
-export GIT_CONFIG_GLOBAL="$DOTDIR/git/gitconfig"
-export RUSTC_WRAPPER="$(which sccache)"
+export GIT_CONFIG_GLOBAL="$HOME/.config/git/gitconfig"
+export RUSTC_WRAPPER
+RUSTC_WRAPPER="$(which sccache)" # Assign separately to avoid masking return value with declaration (exportation)
 
 # Personal paths and variables
 export GH="https://github.com/"
