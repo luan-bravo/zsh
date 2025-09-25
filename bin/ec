@@ -1,0 +1,18 @@
+#! /usr/bin/env zsh
+
+#TODO: accept multiple strings
+if [[ $# -ne 2 ]]; then
+	echo "${blue}USAGE: $0 <color> <string>\n		 add '{COLOR}' to the string if you wish to scape back to the given color${nc}"
+	return -1
+fi
+if [[ -n $1 ]] || (( $colors[(Ie)$1] )); then
+	if [[ -z $clr ]]; then
+		local clr="$1"
+	fi
+else
+	echo "${red}please insert a valid color from array \$colors${nc}"
+	return 1
+fi
+# last color
+local text="${2/\{COLOR\}/${clr}}" # TODO: Actually use $COLOR by exporting so that it works on multiple following calls to $0
+echo "${clr}${text}${nc}"
