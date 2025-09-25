@@ -1,0 +1,8 @@
+[[ -e ./$0 ]] && echo 'true: [[ -e ./$0 ]]' || echo 'false: [[ -e ./$0 ]]'
+[[ -e ./ ]] && echo 'true: [[ -e ./ ]]' || echo 'false: [[ -e ./ ]]'
+[[ -e ./fdsa.zsh ]] && echo 'true: [[ -e ./fdsa.zsh ]]' || echo 'false: [[ -e ./fdsa.zsh ]]'
+[[ -f ./$0 ]] && echo 'true: [[ -f ./$0 ]]' || echo 'false: [[ -f ./$0 ]]'
+[[ -f ./ ]] && echo 'true: [[ -f ./ ]]' || echo 'false: [[ -f ./ ]]'
+[[ -e ./fdsa.zsh ]] && echo 'true: [[ -e ./fdsa.zsh ]]' || echo 'false: [[ -e ./fdsa.zsh ]]'
+[[ -d ./ ]] && echo 'true: [[ -d ./ ]]' || echo 'false: [[ -d ./ ]]'
+[[ -d ./$0 ]] && echo 'true: [[ -d ./$0 ]]' || echo 'false: [[ -d ./$0 ]]'

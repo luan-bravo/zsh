@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+handlepath () {
+	# Check for valid path as first arg
+	local path=""
+	[[ -n "$1" ]] && path="$1"
+
+	local cdcmd=()
+	# If there's at least a non-emtpy arg, 
+	[[ -n "$2" ]] && {
+		shift
+		cdcmd("$@")
+	}
+
+	echo "[$0] path = $path"
+	echo "[$0] cdcmd = $cdcmd"
+
+	local pathtopath="${path:h}"
+	# TODO: finish refactoring to function to then apply to neovim and git differently
+}
+
+handlepath "path/to/dir" printf "cd "
