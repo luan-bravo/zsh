@@ -1,0 +1,39 @@
+#!/usr/bin/env zsh
+# Initiate this Z shell configuration in a new setup
+[[ -f "./.zshenv" ]] && source "./.zshenv" && echo "${green}[$0]${nc} Successfully sourced ./.zshenv" || echo "${red}[$0]${nc} Failed to source .zshenv" || exit 1
+
+local zshenv="$ZDOTDIR/.zshenv" # Set ZDOTDIR to where you what the config to be installed in ./.zshenv...
+local home_zshenv="$HOME/.zshenv" # ...while logged in the user you want it for
+
+# ZSH environment
+## If $home_zshenv doesn't exist/is not a link file OR If it's not a link to $zshenv, link it and source it
+[[ ! -L "$home_zshenv" ]] && {
+	echo "[$0] Setting up .zshenv symlink at users home directory: $home_zshenv "
+	[[ -s "$home_zshenv" ]] && {
+		echo "[$0] Found a .zshenv file in the home directory: $home_zshenv"
+		local homebak="$home_zshenv.bak"
+		[[ ! -f "$homebak" ]] && {
+			echo "$[$0] Creating a backup file: $homebak"
+			# TODO: Get stdin asking to substitute by zshenv && have an option to cat/bat a diff between zshenvs
+			# Check for preexisting backup files
+			while [[ -f "$homebak" ]]; do
+				homebak+=".bak"
+			done
+
+			mv "$home_zshenv" "$homebak" \
+				&& echo "${green}[$0]${nc} Backup file created successfully: $homebak " \
+				|| {
+					echo "${red}[$0]${nc} Failed to back up '$home_zshenv'"
+					exit 1
+				}
+		}
+	}
+
+	ln -sf "$zshenv" "$home_zshenv" && {
+		echo "${green}[$0]${nc} Symbolic link created. Sourcing"
+		source "$home_zshenv"
+	} || {
+		echo "${red}[$0]${nc} Failed to create symbolic link"
+		exit 1
+	}
+}
