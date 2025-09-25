@@ -1,0 +1,44 @@
+#! /usr/bin/env zsh
+# Push todo strings to todoFile (it was a very good source of shell scripting learning for me)
+# Set default global todoFile or custom with '-f' flag
+local todoFile="$TODOFILE"
+while getopts "f:" opt; do
+	case $opt in
+		f)
+			todoFile="$OPTARG"
+			;;
+		\?) echo "Invalid option: -$OPTARG" ;;
+	esac
+	# Takes the flag argument out of the arg array
+	shift $((OPTIND - 1))
+done
+# If todoFile doesn't exists, create it
+if [[ ! -f "$todoFile" ]]; then
+	ec ${yellow} "No file \$todoFile currently exists. Touching todoFile."
+	touch "$todoFile"
+fi
+# Adds a new line if there are already other TODOs in file
+if [[ -s "$todoFile" ]]; then
+	echo "" >> "$todoFile"
+fi
+# MAIN LOOP
+for arg in "$@"; do
+	if echo "- [ ] $arg" >> "$todoFile"; then
+		((added++))
+	else
+		ec ${red} "[todo] Error when trying to 'echo $arg' to $todoFile."
+	fi
+done
+# Total incomplete todos
+local todoCount=$(grep -c -v '^[[:space:]#]*$' "$todoFile")
+# Echo staturs
+if [[ $added -gt 0 ]]; then
+	ec ${green} "[todo] $added TODOs added out of $#! total incomplete TODOs: $todoCount."
+	return 0
+elif [[ $added -st $# ]]; then
+	ec ${yellow} "[todo] $added TODOs added out of $#! total incomplete TODOs: $todoCount."
+	return 1
+else
+	ec ${red} "[todo]	no new TODOs added! total incomplete TODOs: $todoCount."
+	return 1
+fi

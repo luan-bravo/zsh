@@ -1,0 +1,14 @@
+#! /usr/bin/env zsh
+
+# if [ ! -x "$(command -v idf.py)" ]; then
+#	 echo "no idf.py"
+#	 if [ -z "$IDF_PATH" ] && [ -d "/opt/esp-idf" ]; then
+#		 echo "[idf] WARNING: No \$IDF_PATH variable found. Exporting 'IDF_PATH=\"/opt/esp-idf\"'"
+#		 export IDF_PATH="/opt/esp-idf"
+#		 source "$IDF_PATH/export.sh"
+#	 else
+#		 echo "Error: '/opt/esp-idf/' not found."
+#	 fi
+#	 source "$IDF_PATH/export.sh"
+# fi
+# idf.py "$*"
