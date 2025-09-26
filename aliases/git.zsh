@@ -38,3 +38,9 @@ gclgh() {
 		gcl "https://github.com/luan-bravo/$1"
 	fi
 }
+
+alias gd="git diff"
+alias glogv="git log --graph"
+alias glogav="git log --all --graph"
+alias glog="git log --oneline --graph"
+alias gloga="git log --oneline --graph --all"
