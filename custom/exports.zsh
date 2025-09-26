@@ -1,8 +1,7 @@
-# Exports
 # Source
 src() { [[ -f "$1" ]] && source "$1" }
 # Export
-xpt() { [[ -d "$2" ]] && export "$1"="$2" }
+xpt() { [[ -e "$2" ]] && export "$1"="$2" }
 # nvr??? what was I thinking?
 nvr() { [[ -d "$1" ]] && export PATH="$PATH:$1" }
 
