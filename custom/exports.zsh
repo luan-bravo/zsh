@@ -40,3 +40,7 @@ nvr "$HOME/.local/share/nvim/mason/bin"
 nvr "$HOME/.local/bin"
 nvr "$HOME/.opencode/bin"
 
+# WSL browser, requires wslu installation to be followerd
+if [[ -n "$WSL_DISTRO_NAME" && -n "$(whence 'wslview')" ]]; then
+	xpt BROWSER "wslview"
+fi
