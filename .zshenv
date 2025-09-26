@@ -22,8 +22,10 @@ export HYPHEN_INSENSITIVE=true
 export GIT_CONFIG_GLOBAL="$HOME/.config/git/gitconfig"
 export RUSTC_WRAPPER
 RUSTC_WRAPPER="$(which sccache)" # Assign separately to avoid masking return value with declaration (exportation)
+# export SHELLCHECK_OPTS='--shell=bash --exclude=SC1090' # TODO: Figure out how to pass shellcheck args when running it in nvim
 
-# Personal paths and variables
+
+#Personal paths and variables
 export GH="https://github.com/"
 export NOTES="$HOME/notes"
 export TODOFILE="$NOTES/todos/todo.md"
