@@ -15,22 +15,20 @@ alias gsvv="git status --verbose"
 
 alias gc="git commit --verbose"
 alias gcs="git commit"
+alias gcamd="gc --amend"
 alias gcm="git commit -m"
 alias gcam="git commit -am"
-alias gcamd="git commit --amend"
 
 alias gp="git push"
 
-alias gcl="git clone --recurse-submodules"
-
 alias gsubup="git submodule sync && git submodule update --remote"
-
 
 unalias grst 2> /dev/null
 alias grst="dohere git restore --staged"
 unalias grs 2> /dev/null
 alias grs="dohere git restore"
 
+alias gcl="git clone --recurse-submodules"
 gclgh() {
 	if [[ "$1" = *"/"* ]]; then
 		gcl "https://github.com/$1"
