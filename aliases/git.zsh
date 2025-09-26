@@ -31,9 +31,8 @@ alias grst="dohere git restore --staged"
 unalias grs 2> /dev/null
 alias grs="dohere git restore"
 
-
 gclgh() {
-	if [[ "$1" == *"/"* ]]; then
+	if [[ "$1" = *"/"* ]]; then
 		gcl "https://github.com/$1"
 	else
 		gcl "https://github.com/luan-bravo/$1"
