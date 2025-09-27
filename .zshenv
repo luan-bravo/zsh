@@ -3,7 +3,7 @@ export ZDOTDIR="$HOME/.config/zsh"
 export ZSH="/usr/share/oh-my-zsh/"
 export ZSH_CUSTOM="$ZDOTDIR/custom"
 export ZSH_THEME="gruvbox"
-export HISTFILE="$HOME/.zsh_history"
+export HISTFILE="$HOME/.config/.zsh_history"
 export HISTSIZE="10000"
 
 # Instalation path of oh-my-zsh
