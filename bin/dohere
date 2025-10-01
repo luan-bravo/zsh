@@ -25,7 +25,7 @@ if [[ $# -eq 0 ]] || [[ -z "$(whence "$1")" ]]; then
 
 	echo "\t* GIT"
 	echo "\t\texecute at the current repo's top level"
-	echo 
+	echo
 	echo "\t NEOVIM"
 	echo "\t\texecuted at the current repo's top level"
 	echo "\t\t* -c If of of the args to <command> is '-c', nothing is added and the command is run normally"
@@ -97,18 +97,18 @@ if [[ "$hasc" = false	]] || dh_log "\tINFO: -c flag was found"; then
 
 			# If path was populated by a existing path, use it. Else, continue code and run with args
 			if [[ "$is_dir" = true ]]; then
-				set -- "$@" "-c" "cd $path"
+				set -- "$@" "-c" "'cd $path'"
 			fi
 		fi
 	else
-		git_root=$(git rev-parse --show-top-level)
+		git_root=$(git rev-parse --show-toplevel)
 		dh_log "\tLOG: git_root=$git_root"
 		# If <command> is 'git' and $(pwd) is in a repo, run on git repo's root
 
 		if cmd="git" && [[ "${1[-$#cmd,-1]}" = "$cmd" && -n "$git_root" ]]; then
 			set -- "$@" "$git_root"
 		# if command is nvim AND there is no -c flag AND there is at least one argument to pass
-		elif cmd="nvim" && [[ "${1[-$#cmd,-1]}" = "$cmd" &&	-n "$2" ]]; then
+		elif cmd="nvim" && [[ "${1[-$#cmd,-1]}" = "$cmd" && -n "$2" ]]; then
 
 		else
 			set -- "$@" "."
@@ -119,4 +119,8 @@ fi
 dh_log "INFO: Running: '$*'"
 dh_log "INFO: Argc: $#"
 # TODO: (Un)comment to (stop) dry-runs
-"$@"
+echo $PATH
+[[ "$DOHERE_DRY" != true ]] \
+	&&  "$@" \
+	|| echo "$*"
+	# || for a in "$@"; do; echo "$a"; done
