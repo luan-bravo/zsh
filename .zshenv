@@ -1,3 +1,4 @@
+
 # ZSH
 export ZDOTDIR="$HOME/.config/zsh"
 export ZSH="/usr/share/oh-my-zsh/"

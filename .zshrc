@@ -10,6 +10,9 @@ src() {
 	}
 }
 
+src "$ROOT_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh"
+src "$ROOT_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
 
 # Oh-my-zsh and Plugins
 plugins=(
@@ -31,9 +34,6 @@ plugins=(
 	asdf
 )
 src "$ZSH/oh-my-zsh.sh"
-
-src "$ROOT_PLUGINS/zsh-autosuggestions/zsh-autosuggestions.zsh"
-src "$ROOT_PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 
 for alias in "$ZDOTDIR/aliases/"*; do
