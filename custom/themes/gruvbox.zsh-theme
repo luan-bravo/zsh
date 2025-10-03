@@ -22,74 +22,85 @@ CURRENT_BG='NONE'
 ## + other more specific shades shades...
 
 
-case ${SOLARIZED_THEME:-dark} in
+case "${SOLARIZED_THEME:-dark}" in
 		light) CURRENT_FG='3';;
 		*)     CURRENT_FG='0';;
 esac
 
 () {
 	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-	SEGMENT_SEPARATOR=$'\ue0b0' # 
-	RIGHT_SEPARATOR=$'\ue0b2'   # 
+	LEFT_SEPARATOR=$'█'
+	RIGHT_SEPARATOR=$'█'
 }
 
 prompt_segment() {
 	local bg fg
-	[[ -n $1 ]] && bg="%K{$1}" || bg="%k"
-	[[ -n $2 ]] && fg="%F{$2}" || fg="%f"
-	if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-		echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
-	else
-		echo -n "%{$bg%}%{$fg%} "
-	fi
-	CURRENT_BG=$1
-	[[ -n $3 ]] && echo -n $3
+	[[ -n "$1" ]] && bg="%K{$1}" || bg="%k"
+	[[ -n "$2" ]] && fg="%F{$2}" || fg="%f"
+
+	[[ "$CURRENT_BG" != 'NONE' && "$1" != "$CURRENT_BG" ]] && { # it is NOT the first left segment
+		echo -n "%{$bg%F{$CURRENT_BG}%}$LEFT_SEPARATOR%{$fg%}"
+	} || { # it IS the first left segment
+		echo -n "%{$bg$fg%}"
+	}
+
+	CURRENT_BG="$1"
+	 echo -n " $3 " # Left padding & content
 }
 
+# TODO: Refactor `prompt_end` and join with `prompt_segment` fn like `rprompt` (possible? Should I? How to detect we are at end and reset `fg` and `bg`?)
 prompt_end() {
-	if [[ -n $CURRENT_BG ]]; then
-		echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
-	else
-		echo -n "%{%k%}"
-	fi
-	echo -n "%{%f%}"
+
+	[[ -n "$CURRENT_BG" && "$CURRENT_BG" != 'NONE' ]] && {
+		echo -n "%{%k%F{$CURRENT_BG}%}$LEFT_SEPARATOR" # Insert for last segment
+	} || {
+		echo -n "%{%k%}" # Reset bg
+	}
+
+	echo -n "%{%f%}" # Reset fg
+	echo -n " " # Padding before commands
 	CURRENT_BG='NONE'
 }
 
 
 prompt_dir() {
-	prompt_segment 4 $CURRENT_FG '%~'
+	prompt_segment 4 "$CURRENT_FG" '%~'
 }
 
 prompt_git() {
-	(( $+commands[git] )) || return
-	if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
-		return
-	fi
+	(( "$+commands[git]" )) \
+		|| return
+
+	[[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] \
+		&& return
+
 	local PL_BRANCH_CHAR
 	() {
 		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 		PL_BRANCH_CHAR=$'\ue0a0' # 
 	}
+
 	local ref dirty mode repo_path
+	# TO QUOTE
+	$(git rev-parse --is-inside-work-tree >/dev/null 2>&1) && {
+		repo_path="$(git rev-parse --git-dir 2>/dev/null)"
+		dirty="$(parse_git_dirty)"
+		ref="$(git symbolic-ref HEAD 2> /dev/null)" \
+			|| ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
 
-	if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-		repo_path=$(git rev-parse --git-dir 2>/dev/null)
-		dirty=$(parse_git_dirty)
-		ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
-		if [[ -n $dirty ]]; then
+		[[ -n "$dirty" ]] && {
 			prompt_segment 3 0
-		else
-			prompt_segment 2 $CURRENT_FG
-		fi
+		} || {
+			prompt_segment 2 "$CURRENT_FG"
+		}
 
-		if [[ -e "${repo_path}/BISECT_LOG" ]]; then
+		[[ -e "${repo_path}/BISECT_LOG" ]] && {
 			mode=" <B>"
-		elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
+		} || [[ -e "${repo_path}/MERGE_HEAD" ]] && {
 			mode=" >M<"
-		elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
+		} || [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]] && {
 			mode=" >R>"
-		fi
+		}
 
 		setopt promptsubst
 		autoload -Uz vcs_info
@@ -102,62 +113,70 @@ prompt_git() {
 		zstyle ':vcs_info:*' formats ' %m'
 		zstyle ':vcs_info:*' actionformats ' %m'
 		zstyle ':vcs_info:git*+set-message:*' hooks git-st
+
 		vcs_info
 		echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
-	fi
+	}
 }
 
 function +vi-git-st() {
-	local ahead behind
 	local -a gitstatus
-	local -a ahead_and_behind=($(git rev-list --left-right --count HEAD...${hook_com[branch]}@{upstream} 2>/dev/null))
 	local -a stat=("$(git status --porcelain)")
-	local -a untracked=($(echo "$stat" | grep '^??' | wc -l))
+
 	local -a modified=($(echo "$stat" | grep '^.M' | wc -l))
+	(( "$modified" )) \
+		&& gitstatus+=("%{\033[30m%}${modified}\uf044")
 	local -a staged=($(echo "$stat" | grep '^[AM]' | wc -l))
-	ahead=${ahead_and_behind[1]}
-	behind=${ahead_and_behind[2]}
-	(( $modified )) && gitstatus+=( "%{\033[30m%}${modified}\uf044" )
-	(( $staged )) && gitstatus+=( "%{\033[30m%}${staged}\uf046" )
-	(( $untracked )) && gitstatus+=( "%{\033[30m%}${untracked}\ueb32" )
-	(( $ahead )) && gitstatus+=( '' )
-	(( $behind )) && gitstatus+=( '' )
-	[[ -n "$gitstatus" ]] && hook_com[misc]+=' '
-	hook_com[misc]+=${(j: :)gitstatus}
+	(( "$staged" )) \
+		&& gitstatus+=("%{\033[30m%}${staged}\uf046")
+	local -a untracked=($(echo "$stat" | grep '^??' | wc -l))
+	(( "$untracked" )) \
+		&& gitstatus+=("%{\033[30m%}${untracked}\ueb32")
+
+	# TO QUOTE
+	local -a ahead_and_behind=($(git rev-list --left-right --count HEAD...${hook_com[branch]}@{upstream} 2>/dev/null))
+	local ahead="${ahead_and_behind[1]}"
+	(( "$ahead" )) \
+		&& gitstatus+=('')
+	local behind="${ahead_and_behind[2]}"
+	(( "$behind" )) \
+		&& gitstatus+=('')
+
+	[[ -n "$gitstatus" ]] \
+		&& hook_com[misc]+=' '
+	hook_com[misc]+="${(j: :)gitstatus}"
 }
 
 prompt_root() {
-	[[ $UID -eq 0 ]] && prompt_segment 11 0 "\uf0ad"
+	[[ "$UID" -eq 0 ]] \
+		&& prompt_segment 11 0 "\uf0ad"
 }
 
 prompt_errors() {
-	local -a errors
-	if [[ $RETVAL -ne 0 ]]; then
-		errors+="󰜺 "
-		if [[ $RETVAL -gt 1 ]]; then
-			errors+="$RETVAL"
-		fi
-	fi
 	# [[ $(jobs -l | wc -l) -gt 0 ]] && errors+="%{%F{15}%}󰘷" #󰘷
-	[[ -n "$errors" ]] && prompt_segment 1 11 "$errors"
+	[[ "$RETVAL" -gt 0 ]] \
+		&& prompt_segment 1 15 "$RETVAL"
 }
 
 prompt_jobs() {
 	local -a jbs
-	if [[ $BG_JOBS -ne 0 ]]; then
+	# TODO: Count jobs properly
+	# "$(jobs -s | wc -l)" doesn't work and has a weird behavior and only returns the right amount if not in the directory of the first suspended jobs (???)
+	local bg_jobs=${#${(M)jobstates:#suspended\:*:*}}
+	[[ "$BG_JOBS" -ne 0 ]] && {
 		jbs+="󰘷 "
-		if [[ $BG_JOBS -ge 1 ]]; then
-			jbs+="$BG_JOBS"
-		fi
-	fi
-	[[ -n "$jbs" ]] && prompt_segment 14 0 "$jbs"
+		[[ "$BG_JOBS" -ge 1 ]] \
+			&& jbs+="$BG_JOBS"
+	}
+	[[ -n "$jbs" ]] \
+		&& prompt_segment 14 0 "$jbs"
 }
 
 build_prompt() {
 	RETVAL="$?"
 	# TODO: Move errors on right prompt and add $HOST to left prompt
 	prompt_errors
-	BG_JOBS=${#${(M)jobstates:#suspended:*}} # "$(jobs -s | wc -l)" doesn't work and has a weird behavior and only returns the right amount if not in the directory of the first suspended jobs (???)
+	BG_JOBS="${#${(M)jobstates:#suspended\:*:*}}"
 	prompt_jobs
 	prompt_dir
 	prompt_git
@@ -165,57 +184,60 @@ build_prompt() {
 	prompt_end
 }
 
-# rsep(k,Fclock), clock, rsep(Kclock, Fos), os
-### Right Prompt [by luan-bravo]
+
 rprompt_segment() {
 	local bg fg
-	[[ -n $1 ]] && bg="%K{$1}" || bg="%k"
-	[[ -n $2 ]] && fg="%F{$2}" || fg="%f"
-	if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then # not the first rprompt
-		echo -n " %{%K{$CURRENT_BG}%F{$1}%}$RIGHT_SEPARATOR%{$bg$fg%} "
-	else # is first rprompt
-		echo -n "%{%k%F{$1}%}%{$RIGHT_SEPARATOR%}%{$bg$fg%} "
-	fi
-	CURRENT_BG=$1
-	[[ -n $3 ]] && echo -n $3
+	[[ -n "$1" ]] && bg="%K{$1}" || bg="%k"
+	[[ -n "$2" ]] && fg="%F{$2}" || fg="%f"
+
+	[[ "$CURRENT_BG" != 'NONE' && $1 != "$CURRENT_BG" ]] && { # it is NOT the first right segment
+		echo -n " %{%K{${CURRENT_BG}}%F{$1}%}${RIGHT_SEPARATOR}%{${bg}${fg}%}"
+	} || { # it IS the FIRST right segment
+		echo -n "%{%k%F{${1}}%}${RIGHT_SEPARATOR}%{${bg}${fg}%}"
+	}
+
+	CURRENT_BG="$1"
+	echo -n "$3"
 }
 
 
 rprompt_clock() {
-	[[ -n $hour ]] && rprompt_segment 0 7 "$hour"
+	[[ -n "$hour" ]] \
+		&& rprompt_segment 0 7 "$hour"
 }
 
 rprompt_os() {
-	[[ -s /etc/os-release ]] && local distro=$(. /etc/os-release && echo "$NAME" || echo "")
-	local os_icon
+	[[ -s /etc/os-release ]] \
+		&& local distro=$(. /etc/os-release && echo "$NAME" || echo "")
+	local icon color
 	case "$OSTYPE" in
 		linux*)
 			case "$distro" in
 				Arch*)
-					os_color=4
-					os_icon="%{%F{$os_color}%}\uf303%{%f%}" ;; # 󰣇
-				Debian*)
-					os_color=1
-					os_icon="%{%F{$os_color}%}\uf306%{%f%}" ;; # 󰣚
-				Ubuntu*)
-					os_color=5
-					os_icon="%{%F{$os_color}%}\uf306%{%f%}" ;; # 
-				Nix*)
-					os_color=12
-					os_icon="%{%F{$os_color}%}\uf313%{%f%}" ;; # 
+					color=4
+					icon=$'\uf303' ;; # 󰣇
+				debian*)
+					color=1
+					icon=$'\uf306' ;; # 󰣚
+				ubuntu*)
+					color=5
+					icon=$'\uf306' ;; # 
+				nix*)
+					color=12
+					icon=$'\uf313' ;; # 
 				*)
-					os_color=15
-					os_icon="%{%F{$os_color}%}\ue712%{%f%}" ;; # 
-			esac
-		;;
+					color=15
+					icon=$'\ue712' ;; # 
+			esac ;;
 		darwin*)
-			os_color=1
-			os_icon="%{%F{$os_color}%}\ue29e%{%f%}" ;; # 
+			color=7
+			icon=$'\ue29e' ;; # 
 		*)
 			return ;;
 	esac
-	os_icon+=" " # Extra space for two-characters wide icons. Comment this if using mono spaced
-	[[ -n "$os_icon" ]] && rprompt_segment 237 "%k" "$os_icon "
+	local os="%{%F{$color}%}$icon%{ %}"
+	[[ -n "$os" ]] \
+		&& rprompt_segment 237 "%k" "$os"
 }
 
 build_rprompt() {
@@ -224,5 +246,5 @@ build_rprompt() {
 	rprompt_os
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt) '
-RPROMPT=' $(build_rprompt)%{%f%b%k%}'
+PROMPT='%{%f%b%k%}$(build_prompt)'
+RPROMPT='$(build_rprompt)%{%f%b%k%}'
