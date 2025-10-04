@@ -10,7 +10,7 @@ gaa() {
 }
 
 alias gs="git status --short"
-alias gsv="git status --show-stack"
+alias gsv="git status --show-stash"
 alias gsvv="gsv --verbose"
 
 alias gc="git commit --verbose"
