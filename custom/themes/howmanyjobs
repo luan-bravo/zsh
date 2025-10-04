@@ -1,0 +1,27 @@
+#!/usr/bin/env -S zsh
+
+# local suspended_jobs=()
+echo "jobstates: ${jobstates[@]}"
+# [[ -n $jobstates ]] && {
+# 	for arg in "$jobstates"; do
+# 		# Check if the word matches the specific pattern 'suspended::*'
+# 		if [[ "$arg" == "suspended:"* ]]; then
+# 			# Extract the ID by removing the prefix and suffix
+# 			# 1. ${arg#suspended::} removes the prefix 'suspended::'
+# 			# 2. ${...%=*} removes the suffix from '=' to the end
+# 			echo "$arg"
+# 			suspended_jobs+=("${${arg#suspended\:*\:*}%=*}")
+# 			echo "$suspended_jobs[@]"
+# 		fi
+# 	done
+# 	# print -l "${suspended_jobs[@]}"
+# 	echo "${suspended_jobs[@]}"
+# }
+
+echo "echo: $(jobs)"
+local jobs=$(jobs)
+echo "var: $jobs"
+cj() {
+	echo "cj(): $(jobs | wc -l)"
+}
+cj

@@ -1,0 +1,43 @@
+#!/usr/bin/env zsh
+[[ "$(whence logger)" ]]
+
+# TODO: Probably will have to change how TAG is set (just env? set through arg? flag?)
+readonly TAG="${0##*/}" 
+
+local priority="${1:u}"
+
+local err_flag=false
+
+local error="ERROR"
+local warning="WARNING"
+local info="INFO"
+local notice="NOTICE"
+
+# Check if $priority is a slice of one of the priority leves
+case "$priority" in;
+	"${error:0:$#priority}")
+		priority="user.err"
+	;;
+	"${warning:0:$#priority}") 
+		priority="user.warning"
+	;;
+	"${info:0:$#priority}")
+		priority="user.info"
+	;;
+	"${notice:0:$#priority}" | *)
+		priority="user.notice"
+	;;
+esac
+
+local message="$2"
+
+# exec &>> "$LOG_FILE" # Redirect stdout and stderr to the log file, appending to it
+alias only_log="logger -t $TAG -p $priority $message" # Echo to stdout and pipe to logger
+alias echo_log="echo $message >1 | logger -t $TAG -p $priority" # Echo to stdout and pipe to logger
+
+local toecho=true # TODO Get echo flag from user, defautl to true
+[[ "$toecho" = true ]] && {
+	echo_log
+} || {
+	only_log
+}
