@@ -29,39 +29,16 @@ esac
 
 () {
 	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-	LEFT_SEPARATOR=$'█'
-	RIGHT_SEPARATOR=$'█'
 }
 
 prompt_segment() {
-	local bg fg
-	[[ -n "$1" ]] && bg="%K{$1}" || bg="%k"
-	[[ -n "$2" ]] && fg="%F{$2}" || fg="%f"
-
-	[[ "$CURRENT_BG" != 'NONE' && "$1" != "$CURRENT_BG" ]] && { # it is NOT the first left segment
-		echo -n "%{$bg%F{$CURRENT_BG}%}$LEFT_SEPARATOR%{$fg%}"
-	} || { # it IS the first left segment
-		echo -n "%{$bg$fg%}"
-	}
-
 	CURRENT_BG="$1"
-	 echo -n " $3 " # Left padding & content
+	local bg fg
+	[[ -n "$1" && -n "$2" ]] \
+		&& echo -n "%{%K{$1}%F{$2}%}" \
+		|| echo -n "%{%k%f%}"
+	echo -n " $3 "
 }
-
-# TODO: Refactor `prompt_end` and join with `prompt_segment` fn like `rprompt` (possible? Should I? How to detect we are at end and reset `fg` and `bg`?)
-prompt_end() {
-
-	[[ -n "$CURRENT_BG" && "$CURRENT_BG" != 'NONE' ]] && {
-		echo -n "%{%k%F{$CURRENT_BG}%}$LEFT_SEPARATOR" # Insert for last segment
-	} || {
-		echo -n "%{%k%}" # Reset bg
-	}
-
-	echo -n "%{%f%}" # Reset fg
-	echo -n " " # Padding before commands
-	CURRENT_BG='NONE'
-}
-
 
 prompt_dir() {
 	prompt_segment 4 "$CURRENT_FG" '%~'
@@ -173,31 +150,17 @@ prompt_jobs() {
 }
 
 build_prompt() {
-	RETVAL="$?"
-	# TODO: Move errors on right prompt and add $HOST to left prompt
+	local RETVAL="$?"
 	prompt_errors
-	BG_JOBS="${#${(M)jobstates:#suspended\:*:*}}"
 	prompt_jobs
 	prompt_dir
 	prompt_git
 	prompt_root
-	prompt_end
 }
 
 
 rprompt_segment() {
-	local bg fg
-	[[ -n "$1" ]] && bg="%K{$1}" || bg="%k"
-	[[ -n "$2" ]] && fg="%F{$2}" || fg="%f"
-
-	[[ "$CURRENT_BG" != 'NONE' && $1 != "$CURRENT_BG" ]] && { # it is NOT the first right segment
-		echo -n " %{%K{${CURRENT_BG}}%F{$1}%}${RIGHT_SEPARATOR}%{${bg}${fg}%}"
-	} || { # it IS the FIRST right segment
-		echo -n "%{%k%F{${1}}%}${RIGHT_SEPARATOR}%{${bg}${fg}%}"
-	}
-
-	CURRENT_BG="$1"
-	echo -n "$3"
+	prompt_segment $@
 }
 
 
@@ -246,5 +209,5 @@ build_rprompt() {
 	rprompt_os
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt)'
-RPROMPT='$(build_rprompt)%{%f%b%k%}'
+PROMPT='%{%f%b%k%}$(build_prompt)%{%f%b%k%} '
+RPROMPT=' $(build_rprompt)%{%f%b%k%}'
