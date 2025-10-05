@@ -143,16 +143,16 @@ esac
 
 prompt_jobs() {
 	local -a jbs
-	# TODO: Count jobs properly
-	# "$(jobs -s | wc -l)" doesn't work and has a weird behavior and only returns the right amount if not in the directory of the first suspended jobs (???)
-	local bg_jobs=${#${(M)jobstates:#suspended\:*:*}}
-	[[ "$BG_JOBS" -ne 0 ]] && {
-		jbs+="󰘷 "
-		[[ "$BG_JOBS" -ge 1 ]] \
-			&& jbs+="$BG_JOBS"
-	}
-	[[ -n "$jbs" ]] \
-		&& prompt_segment 14 0 "$jbs"
+	local ij=0
+	for j in $jobstates; do
+		[[ "$j" = "suspended"* ]] \
+			&& ((ij++))
+	done
+	if (( "$ij" > 1 )); then
+		prompt_segment 14 0 "󰘷 $ij"
+	elif (( "$ij" > 0 )); then
+		prompt_segment 14 0 "󰘷 "
+	fi
 }
 
 build_prompt() {
