@@ -65,21 +65,21 @@ prompt_git() {
 		ref="$(git symbolic-ref HEAD 2> /dev/null)" \
 			|| ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
 
-		[[ -n "$dirty" ]] && {
+		if [[ -n "$dirty" ]]; then
 			local bg=3
 			local fg=0
-		} || {
+		else
 			local bg=2
 			local fg="$CURRENT_FG"
-		}
+		fi
 
-		[[ -e "${repo_path}/BISECT_LOG" ]] && {
+		if [[ -e "${repo_path}/BISECT_LOG" ]]; then
 			mode=" <B>"
-		} || [[ -e "${repo_path}/MERGE_HEAD" ]] && {
+		elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
 			mode=" >M<"
-		} || [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]] && {
+		elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
 			mode=" >R>"
-		}
+		fi
 
 		setopt promptsubst
 		autoload -Uz vcs_info
