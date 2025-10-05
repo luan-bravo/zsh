@@ -132,9 +132,13 @@ prompt_root() {
 }
 
 prompt_errors() {
-	# [[ $(jobs -l | wc -l) -gt 0 ]] && errors+="%{%F{15}%}󰘷" #󰘷
-	[[ "$RETVAL" -gt 0 ]] \
-		&& prompt_segment 1 15 "$RETVAL"
+	case "$RETVAL" in;
+		0) ;; # Success
+		148|141) ;; # Suspend job | Resume Job
+		*)
+			prompt_segment 1 15 "$RETVAL"
+		;;
+esac
 }
 
 prompt_jobs() {
