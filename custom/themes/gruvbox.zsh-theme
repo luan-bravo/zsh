@@ -66,9 +66,11 @@ prompt_git() {
 			|| ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
 
 		[[ -n "$dirty" ]] && {
-			prompt_segment 3 0
+			local bg=3
+			local fg=0
 		} || {
-			prompt_segment 2 "$CURRENT_FG"
+			local bg=2
+			local fg="$CURRENT_FG"
 		}
 
 		[[ -e "${repo_path}/BISECT_LOG" ]] && {
@@ -92,7 +94,7 @@ prompt_git() {
 		zstyle ':vcs_info:git*+set-message:*' hooks git-st
 
 		vcs_info
-		echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+		prompt_segment "$bg" "$fg" "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
 	}
 }
 
