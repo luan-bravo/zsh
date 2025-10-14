@@ -21,7 +21,6 @@ alias gcam="git commit -am"
 
 alias gp="git push"
 
-alias gsubup="git submodule sync && git submodule update --remote"
 
 unalias grst 2> /dev/null
 alias grst="dohere git restore --staged"
@@ -42,3 +41,33 @@ alias glogv="git log --graph"
 alias glogav="git log --all --graph"
 alias glog="git log --oneline --graph"
 alias gloga="git log --oneline --graph --all"
+
+alias gsubup="git submodule sync && git submodule update --remote"
+#
+# `git submodule foreach` with alias expansion
+gsufe() {
+	local cmd="$*"
+	local expanded=""
+
+	local -A aliases
+	while read line; do
+		local name="${line%%=*}"
+		local val="${line#*=}"
+		val="${val#[\'\"]}"; val="${val%[\'\"]}"
+		aliases[$name]="$val"
+	done < <(alias)
+
+	# Expand each word if it's an alias
+	for word in ${=cmd}; do
+		if [[ -n "${aliases[$word]}" ]]; then
+			expanded+="${aliases[$word]} "
+		else
+			expanded+="$word "
+		fi
+	done
+
+	[[ -n "$VERBOSE" ]] && echo "Running: $expanded" >&2
+
+	git submodule foreach "${expanded% }"
+}
+alias gsufev='VERBOSE=1 gsufe'
