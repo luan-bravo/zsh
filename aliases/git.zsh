@@ -5,7 +5,7 @@ gaa() {
 	if [[ "$#" -ne 0 ]]; then
 		git add "$@"
 	else
-		dohere git add
+		githere git add
 	fi
 }
 
@@ -23,9 +23,9 @@ alias gp="git push"
 
 
 unalias grst 2> /dev/null
-alias grst="dohere git restore --staged"
+alias grst="githere git restore --staged"
 unalias grs 2> /dev/null
-alias grs="dohere git restore"
+alias grs="githere git restore"
 
 alias gcl="git clone --recurse-submodules"
 gclgh() {

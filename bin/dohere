@@ -1,126 +1,26 @@
 #!/usr/bin/env zsh
-# Execute command at '.', the present working directory, or at the provided path more easily. Good for aliases
+# Make aliases cleaner by passing a '.' to a command if there are no other args
 
-dh_log() {
-	if [[ "$DOHERE_LOG" = true ]]; then
-		echo "[dohere] $*"
-	fi
-}
+declare cmd="$1"
+shift
 
-
-if [[ $# -eq 0 ]] || [[ -z "$(whence "$1")" ]]; then
-	if [[ $# -eq 0 ]]; then
-		echo "[dohere] error: No arguments passed"
-	elif [[ -z "$(whence "$1")" ]]; then
-		echo "[dohere] error: '$1' is not a valid command"
-	fi
-
+if [[ -z "$cmd" ]]; then
+	echo "[dohere] ERROR: No arguments passed"
+	echo
 	echo "DOHERE"
-	echo "\tExecute a <command> in the specified directory or at the PWD ('.')"
+	echo "\tMake aliases cleaner by adding a '.' in case no arguments are passed"
 	echo
 	echo "\tUSAGE"
 	echo "dohere <command> [args...]"
 	echo
-	echo "\tIf no [arguments] are provided, the <command> is ran as '<command> .'"
+	echo "\tIf no [arguments] are provided, the <command> is ran as '<command> \$toplevel' if in a repo, or as '<command> .'"
+	echo "\tElse, the [arguments] get passed down and the <command> executed as usual"
 
-	echo "\t* GIT"
-	echo "\t\texecute at the current repo's top level"
-	echo
-	echo "\t NEOVIM"
-	echo "\t\texecuted at the current repo's top level"
-	echo "\t\t* -c If of of the args to <command> is '-c', nothing is added and the command is run normally"
-	echo "\t\t	 with the provided [arguments]"
-
-	return 1
+	exit 1
 fi
 
-# expand cmd
-cmd="$(whence "$1")"
-shift
-set -- "$cmd" "$@" # reset previous order of args in $@ with expanded $1
-
-
-dh_log "Starting args: '$*'"
-
-
-hasc=false # has '-c' flag
-found_paths=() # Args that will be passed to run $1
-
-# Go over args, check for dohere flags and parse others
-for (( i=2; i <= $#; i++ )); do
-	arg="${@[i]}"
-	dh_log "for arg: '$arg'"
-	# Watch for nvim 'cd' flag and the following path if existing
-	if [[ "$arg" = "-c" ]]; then
-		hasc=true
-		dh_log "INFO: Found '-c' tag, not adding anything"
-		# Check for valid paths
-	elif [[ -e "$arg" ]] || [[ -e "${arg:h}" && "${arg:h}" != "." ]]; then
-		found_paths+=("$i")
-	fi
-
-done
-
-if (( "$#found_paths" > 0 )); then
-	dh_log "INFO: Found path '$arg' at index #${i} "
+if (( $#args == 0 )); then
+	"$cmd" "$@"
 else
-	dh_log "INFO: did not find any paths"
+	"$cmd" "."
 fi
-
-argcmd() {
-	return "${1[-$#2,-1]}"
-}
-
-if [[ "$hasc" = false	]] || dh_log "\tINFO: -c flag was found"; then
-	dh_log "\tLOG: found_paths = ( ${found_paths[*]} )"
-	if (( "$#found_paths" >= 1 )); then
-		dh_log "INFO: Found some path(s)"
-
-		# if first arg in @ is cmd and there is only one 
-		
-		if cmd="nvim" && [[ "${1[-$#cmd,-1]}" = "$cmd" ]] && (( "$#found_paths" == 1 )); then
-			dh_log "INFO: Doing nvim"
-
-			path_i=$found_paths[1]
-			path="${@[path_i]}"
-			is_dir=false
-			# If path is already a dir, use it path to run, elif consider for paht's parent dir
-			if [[ -d "$path" ]]; then
-				# dir path already assigned to $path
-				is_dir=true
-			elif [[ -d "${path:h}" && "${path:h}" != "." ]]; then
-				path="${path:h}"
-				is_dir=true
-			fi
-			dh_log "\tLOG: path=$path"
-			dh_log "\tLOG: is_dir=$path"
-
-			# If path was populated by a existing path, use it. Else, continue code and run with args
-			if [[ "$is_dir" = true ]]; then
-				set -- "$@" "-c" "'cd $path'"
-			fi
-		fi
-	else
-		git_root=$(git rev-parse --show-toplevel)
-		dh_log "\tLOG: git_root=$git_root"
-		# If <command> is 'git' and $(pwd) is in a repo, run on git repo's root
-
-		if cmd="git" && [[ "${1[-$#cmd,-1]}" = "$cmd" && -n "$git_root" ]]; then
-			set -- "$@" "$git_root"
-		# if command is nvim AND there is no -c flag AND there is at least one argument to pass
-		elif cmd="nvim" && [[ "${1[-$#cmd,-1]}" = "$cmd" && -n "$2" ]]; then
-
-		else
-			set -- "$@" "."
-		fi
-	fi
-fi
-
-dh_log "INFO: Running: '$*'"
-dh_log "INFO: Argc: $#"
-# TODO: (Un)comment to (stop) dry-runs
-echo $PATH
-[[ "$DOHERE_DRY" != true ]] \
-	&&  "$@" \
-	|| echo "$*"
-	# || for a in "$@"; do; echo "$a"; done

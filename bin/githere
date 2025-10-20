@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+# executes $1 at
+
+declare cmd="$1"
+shift
+
+usage() {
+	echo "GITHERE"
+	echo "\tMake aliases cleaner extending 'dohere' to also look for git's top level"
+	echo
+	echo "\tUSAGE"
+	echo "githere <command> [args...]"
+	echo
+	echo "\tIf no [arguments] are provided, the <command> is ran as '<command> \$toplevel' if in a repo, or as '<command> .'"
+	echo "\tElse, the [arguments] get passed down and the <command> executed as usual"
+}
+
+if [[ -z "$cmd" ]]; then
+	echo "[githere] ERROR: No command passed"
+	echo
+	usage
+	exit 1
+fi
+
+declare toplevel
+toplevel="$(git rev-parse --show-toplevel 2> /dev/null)"
+
+# If in a repo, run at toplevel
+if (( $# == 0 )) && [[ -d "$toplevel" ]]; then
+	"$cmd" "$toplevel"
+else
+	dohere "$cmd" "$@"
+fi
