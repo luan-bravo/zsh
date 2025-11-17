@@ -25,10 +25,31 @@ declare -g DEFAULT_K="$true_white" DEFAULT_F='black'
 [[ "$SOLARIZED_THEME" = 'light' ]] \
 	&& tmp="$DEFAULT_K" DEFAULT_K="$DEFAULT_F" DEFAULT_F="$tmp" && unset tmp
 
+declare -gA char
 () {
-	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-	declare -g SEGMENT_SEPARATOR=$'\ue0b0' # 
-	declare -g RIGHT_SEPARATOR=$'\ue0b2'   # 
+	local LC_ALL='' LC_CTYPE='en_US.UTF-8'
+	char=(
+		[LEFT_SEPARATOR]=$''
+		[RIGHT_SEPARATOR]=$''
+		[GIT_BRANCH]=$''
+		[GIT_REF_SHORT]=$'↳'
+		[GIT_STAGEDSTR]=$'✚'
+		[GIT_UNSTAGEDSTR]=$'●'
+		[GIT_MODIFIED]=$''
+		[GIT_UNSTAGED]=$''
+		[GIT_STAGED]=$''
+		[GIT_AHEAD_AND_BEHIND]=$'⇅'
+		[GIT_AHEAD]=$'↑'
+		[GIT_BEHIND]=$'↓'
+		[OS_LINUX]=$''
+		[OS_ARCH]=$'󰣇'
+		[OS_DEBIAN]=$'󰣚'
+		[OS_UBUNTU]=$''
+		[OS_NIX]=$''
+		[OS_DARWIN]=$''
+		[USER_ROOT]=$''
+		[SUSPENDED_JOBS]=$'󰘷'
+	)
 }
 
 declare -g PREV_K='NONE' PREV_F='NONE' # t as in theme
@@ -38,7 +59,7 @@ prompt_segment() {
 	[[ -n $1 ]] && bg="%K{$1}" || bg="%k"
 	[[ -n $2 ]] && fg="%F{$2}" || fg="%f"
 	if [[ $PREV_K != 'NONE' && $1 != $PREV_K ]]; then
-		echo -n " %{$bg%F{$PREV_K}%}$SEGMENT_SEPARATOR%{$fg%} "
+		echo -n " %{$bg%F{$PREV_K}%}${char[LEFT_SEPARATOR]}%{$fg%} "
 	else
 		echo -n "%{$bg%}%{$fg%} "
 	fi
@@ -48,7 +69,7 @@ prompt_segment() {
 
 prompt_end() {
 	if [[ -n $PREV_K ]]; then
-		echo -n " %{%k%F{$PREV_K}%}$SEGMENT_SEPARATOR"
+		echo -n " %{%k%F{$PREV_K}%}${char[LEFT_SEPARATOR]}"
 	else
 		echo -n "%{%k%}"
 	fi
@@ -222,9 +243,9 @@ rprompt_segment() {
 	[[ -n $1 ]] && bg="%K{$1}" || bg="%k"
 	[[ -n $2 ]] && fg="%F{$2}" || fg="%f"
 	if [[ $PREV_K != 'NONE' && $1 != $PREV_K ]]; then # not the first rprompt
-		echo -n " %{%K{$PREV_K}%F{$1}%}$RIGHT_SEPARATOR%{$bg$fg%} "
+		echo -n " %{%K{$PREV_K}%F{$1}%}${char[RIGHT_SEPARATOR]}%{$bg$fg%} "
 	else # is first rprompt
-		echo -n "%{%k%F{$1}%}%{$RIGHT_SEPARATOR%}%{$bg$fg%} "
+		echo -n "%{%k%F{$1}%}%{${char[RIGHT_SEPARATOR]}%}%{$bg$fg%} "
 	fi
 	PREV_K=$1
 	[[ -n $3 ]] && echo -n $3
