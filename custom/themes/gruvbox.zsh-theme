@@ -52,7 +52,7 @@ declare -gA char
 	)
 }
 
-declare -g PREV_K='NONE' PREV_F='NONE' # t as in theme
+declare -g PREV_K='NONE' PREV_F='NONE'
 
 prompt_segment() {
 	local bg fg
