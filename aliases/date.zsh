@@ -1,0 +1,6 @@
+alias today="date +%y%m%d"
+alias todayf="date +%y-%m-%d"
+alias hour="date +%H%M"
+alias hourf="date +%H:%M"
+alias todayhour="date +%y%m%d%H%M"
+alias todayhourf="date +%y-%m-%d @ %H:%M"
