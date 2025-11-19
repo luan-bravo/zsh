@@ -1,18 +1,7 @@
 #!/usr/bin/env zsh
 # Neovim alias with automated change of directory
 
-local nv
-nv="$(whence nvim)"
+local dir
+dir="${$(git rev-parse --show-toplevel 2>/dev/null):-.}"
 
-local toplevel
-toplevel="$(git rev-parse --show-toplevel 2> /dev/null)"
-
-elif [[ $# -eq 0 ]]; then
-	"$nv" '.'
-elif [[ $# -eq 1 && -d "$1" ]]; then # If only arg is a valid dir, open and cd
-	"$nv" "$1" '-c' "cd $1"
-elif [[ -d "$toplevel" ]]; then
-	"$nv" "$@" '-c' "cd $toplevel"
-else
-	"$nv" "$@"
-fi
+"$(whence nvim)" "${@:-$dir}" '-c' "cd ${1:-$dir}"
