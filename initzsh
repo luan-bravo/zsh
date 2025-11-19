@@ -8,17 +8,15 @@ local home_zshenv="$HOME/.zshenv" # ...while logged in the user you want it for
 # ZSH environment
 ## If $home_zshenv doesn't exist/is not a link file OR If it's not a link to $zshenv, link it and source it
 [[ ! -L "$home_zshenv" ]] && {
-	echo "[$0] Setting up .zshenv symlink at users home directory: $home_zshenv "
+	echo "[$0] Setting up .zshenv symlink at users home directory: $home_zshenv"
 	[[ -s "$home_zshenv" ]] && {
 		echo "[$0] Found a .zshenv file in the home directory: $home_zshenv"
 		local homebak="$home_zshenv.bak"
 		[[ ! -f "$homebak" ]] && {
-			echo "$[$0] Creating a backup file: $homebak"
+			echo "[$0] Creating a backup file: $homebak"
 			# TODO: Get stdin asking to substitute by zshenv && have an option to cat/bat a diff between zshenvs
 			# Check for preexisting backup files
-			while [[ -f "$homebak" ]]; do
-				homebak+=".bak"
-			done
+			while [[ -f "$homebak" ]]; do homebak+=".bak"; done
 
 			mv "$home_zshenv" "$homebak" \
 				&& echo "${green}[$0]${nc} Backup file created successfully: $homebak " \
